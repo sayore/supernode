@@ -6,11 +6,27 @@ class MessageHelper {
         return msg.member.displayName;
     }
     static getRepliantsVisibleName(msg) {
-        return (msg.mentions.repliedUser ?
-            (msg.mentions.repliedUser.username ?
-                msg.mentions.repliedUser.username
-                : msg.mentions.repliedUser.tag)
-            : "noone?");
+        var _a;
+        if (this.hasRepliant(msg))
+            return (((_a = msg.mentions) === null || _a === void 0 ? void 0 : _a.repliedUser) ?
+                (msg.mentions.repliedUser.username ?
+                    msg.mentions.repliedUser.username
+                    : msg.mentions.repliedUser.tag)
+                : "noone?");
+        else
+            return "noone?";
+    }
+    static isRepliant(msg, userid) {
+        if (this.hasRepliant(msg)) {
+            console.log(console.log(msg.mentions.repliedUser.id));
+            console.log(userid);
+            return msg.mentions.repliedUser.id == userid;
+        }
+        else
+            return false;
+    }
+    static hasRepliant(msg) {
+        return msg.mentions != undefined;
     }
 }
 exports.MessageHelper = MessageHelper;

@@ -8,8 +8,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
+  "main": "./main.js",
+  "types": "./main.d.ts",
   "dependencies": {
     "discord.js": "^13.2.0",
     "fs-extra": "^10.0.0",

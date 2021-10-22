@@ -13,6 +13,8 @@
   "dependencies": {
     "discord.js": "^13.2.0",
     "fs-extra": "^10.0.0",
+    "level": "^7.0.1",
+    "level-ts": "^2.1.0",
     "typescript": "^4.5.0-dev.20211022"
   },
   "devDependencies": {

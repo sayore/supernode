@@ -1,1 +1,0 @@
-{"version":3,"file":"Activateable.js","sourceRoot":"","sources":["../../src/Game/Activateable.ts"],"names":[],"mappings":";;;AAAA,MAAa,YAAY;IAGrB,KAAK;QACH,IAAI,IAAI,CAAC,MAAM;YACb,IAAI,CAAC,MAAM,CAAC,KAAK,EAAE,CAAC;IACxB,CAAC;IACD,MAAM;QACJ,IAAI,IAAI,CAAC,MAAM;YACb,IAAI,CAAC,MAAM,CAAC,MAAM,EAAE,CAAC;IACzB,CAAC;CACF;AAXH,oCAWG"}

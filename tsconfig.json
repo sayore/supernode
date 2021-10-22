@@ -11,12 +11,11 @@
         "declaration": true,
         "noEmit": false,
         "checkJs": false,
-        "outDir": "./dist",
+        "outDir": "./",
         
     },
     "include": ["./src/main.ts"],
     "exclude": [
-        "node_modules",
-        "./dist"
+        "node_modules"
     ]
 }

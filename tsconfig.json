@@ -1,16 +1,22 @@
 {
     "compilerOptions": {
-      "module": "nodenext",
-      "moduleResolution": "Node",
-      "target": "es6",
-      "lib": ["es6","dom"],
-      "sourceMap": true,
-      "declaration": true,
-      "noEmit": false,
-"checkJs": true,
+        "module": "nodenext", 
+        "target": "es6",
+        "moduleResolution": "Node",
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "sourceMap": true,
+        "declaration": true,
+        "noEmit": false,
+        "checkJs": false,
+        "outDir": "./dist",
+        
     },
+    "include": ["./src/main.ts"],
     "exclude": [
-      "node_modules"
+        "node_modules",
+        "./dist"
     ]
-  }
-  
+}

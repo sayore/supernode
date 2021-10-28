@@ -1,40 +1,40 @@
-export interface Application {
-    /**
-     * Define a function to run on error event.
-     */
-    error?(eventdata?:any) : void
-    /**
-     * Define a function to run on exit event.
-     */
-    exit?(eventdata?:any) : void
-    /**
-     * Define a function to run on init event.
-     */
-    init?(eventdata?:any) : void
-    /**
-     * Define a function to run permanently
-     */
-    run(eventdata?:any) : void
-    /**
-     * Set the mode the Application shall be run on the sevServer
-     */
-    typeOfApplication? : TypeOfApplication
-    needsSafeMode? : SafetyMode
-    meta? : object
+import { ApplicationCollection } from "./ApplicationCollection";
+import { IApplication } from "./IApplication";
+import { ITypeable } from "./ITypeable";
+
+export class Application implements IApplication, ITypeable{
+    Type: string | TypeOfApplication = TypeOfApplication.NoInteraction;
+    uid: string;
+    Parent?: ApplicationCollection = undefined;
+    error?(eventdata?: any): void {
+        throw new Error("Method not implemented.");
+    }
+    exit?(eventdata?: any): void {
+        throw new Error("Method not implemented.");
+    }
+    init?(eventdata?: any): void {
+        throw new Error("Method not implemented.");
+    }
+    async run(eventdata?: any) {
+        throw new Error("Method not implemented.");
+    }
+    restart?() {
+        this.run();
+    }
+    typeOfApplication?: TypeOfApplication;
+    needsSafeMode?: SafetyMode;
+    meta?: object;
 }
 
-export interface ApplicationCollection {
-    applications:Application[]
-    meta? : object
+export enum TypeOfApplication {
+    Webserver = "Webserver Application",
+    Express = "Express Application",
+    BackgroundProcess = "Background Application",
+    Database = "Database Application",
+    NoInteraction = "None Application"
 }
 
-enum TypeOfApplication {
-    Webserver,
-    BackgroundProcess,
-    Database
-}
-
-enum SafetyMode {
+export enum SafetyMode {
     NeedsCatch,
     Safe,
     OnceNeedsCatch,

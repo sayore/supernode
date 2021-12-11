@@ -7,14 +7,17 @@ export class Environment {
         "win32":os.userInfo().homedir+"/.config/"
     }
 
-    static save(name:string, data:any) {
-        fs.createFileSync(Environment.EnvFileLocations[process.platform]+name)
-        fs.writeFileSync(Environment.EnvFileLocations[process.platform]+name,JSON.stringify(data));
+    static save(envfilename:string, data:any) {
+        fs.createFileSync(Environment.EnvFileLocations[process.platform]+envfilename)
+        fs.writeFileSync(Environment.EnvFileLocations[process.platform]+envfilename,JSON.stringify(data));
     }
-    static load<T>(name:string):T {
-        return <T>JSON.parse(fs.readFileSync(Environment.EnvFileLocations[process.platform]+name).toString());
+    static load<T>(envfilename:string):T {
+        return <T>JSON.parse(fs.readFileSync(Environment.EnvFileLocations[process.platform]+envfilename).toString());
     }
-    static checkExists(name:string) {
-        return fs.existsSync(Environment.EnvFileLocations[process.platform]+name);
+    static checkExists(envfilename:string) {
+        return fs.existsSync(Environment.EnvFileLocations[process.platform]+envfilename);
+    }
+    static getEnvFilePath(envfilename:string) {
+        return Environment.EnvFileLocations[process.platform]+envfilename;
     }
 }

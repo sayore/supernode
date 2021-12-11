@@ -23,15 +23,18 @@ exports.Environment = void 0;
 const fs = __importStar(require("fs-extra"));
 const os = __importStar(require("os"));
 class Environment {
-    static save(name, data) {
-        fs.createFileSync(Environment.EnvFileLocations[process.platform] + name);
-        fs.writeFileSync(Environment.EnvFileLocations[process.platform] + name, JSON.stringify(data));
+    static save(envfilename, data) {
+        fs.createFileSync(Environment.EnvFileLocations[process.platform] + envfilename);
+        fs.writeFileSync(Environment.EnvFileLocations[process.platform] + envfilename, JSON.stringify(data));
     }
-    static load(name) {
-        return JSON.parse(fs.readFileSync(Environment.EnvFileLocations[process.platform] + name).toString());
+    static load(envfilename) {
+        return JSON.parse(fs.readFileSync(Environment.EnvFileLocations[process.platform] + envfilename).toString());
     }
-    static checkExists(name) {
-        return fs.existsSync(Environment.EnvFileLocations[process.platform] + name);
+    static checkExists(envfilename) {
+        return fs.existsSync(Environment.EnvFileLocations[process.platform] + envfilename);
+    }
+    static getEnvFilePath(envfilename) {
+        return Environment.EnvFileLocations[process.platform] + envfilename;
     }
 }
 exports.Environment = Environment;

@@ -3,7 +3,8 @@ export declare class Environment {
         linux: string;
         win32: string;
     };
-    static save(name: string, data: any): void;
-    static load<T>(name: string): T;
-    static checkExists(name: string): boolean;
+    static save(envfilename: string, data: any): void;
+    static load<T>(envfilename: string): T;
+    static checkExists(envfilename: string): boolean;
+    static getEnvFilePath(envfilename: string): string;
 }

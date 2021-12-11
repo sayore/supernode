@@ -19,4 +19,5 @@ __exportStar(require("./IApplicationCollection"), exports);
 __exportStar(require("./ExpressApplication"), exports);
 __exportStar(require("./Application"), exports);
 __exportStar(require("./ApplicationCollection"), exports);
+__exportStar(require("./Environment"), exports);
 //# sourceMappingURL=mod.js.map

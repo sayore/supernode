@@ -30,6 +30,9 @@ class Environment {
     static load(name) {
         return JSON.parse(fs.readFileSync(Environment.EnvFileLocations[process.platform] + name).toString());
     }
+    static checkExists(name) {
+        return fs.existsSync(Environment.EnvFileLocations[process.platform] + name);
+    }
 }
 exports.Environment = Environment;
 Environment.EnvFileLocations = {

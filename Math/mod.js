@@ -12,4 +12,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./MathExt"), exports);
 __exportStar(require("./Vector2"), exports);
+__exportStar(require("./Chance"), exports);
+__exportStar(require("./Chanceable"), exports);
 //# sourceMappingURL=mod.js.map

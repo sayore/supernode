@@ -9,9 +9,9 @@ class Chance {
         // Throw a dart onto the possible chance size
         var picked = Math.floor(Math.random() * allChances);
         // Remove items until we reach'd the picked chance point in the accumulation
-        for (var i = 0; picked > 0; i++) {
+        var i = 0;
+        for (; picked > 0; i++)
             picked -= chanceables[i].chance;
-        }
         // Return the picked chance, it's index is -1 because out loop actually added pone before
         return chanceables[i - 1];
     }

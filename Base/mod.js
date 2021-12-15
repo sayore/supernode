@@ -20,4 +20,5 @@ __exportStar(require("./ExpressApplication"), exports);
 __exportStar(require("./Application"), exports);
 __exportStar(require("./ApplicationCollection"), exports);
 __exportStar(require("./Environment"), exports);
+__exportStar(require("./Logging"), exports);
 //# sourceMappingURL=mod.js.map

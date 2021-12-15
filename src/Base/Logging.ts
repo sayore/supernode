@@ -42,7 +42,8 @@ export class InteractiveLogging {
 
 export enum LogTarget {
     Console = "TTY",
-    Textfile = "TF"
+    Textfile = "TF",
+    All = "All"
 }
 
 export enum LogLevel {

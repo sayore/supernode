@@ -66,6 +66,7 @@ var LogTarget;
 (function (LogTarget) {
     LogTarget["Console"] = "TTY";
     LogTarget["Textfile"] = "TF";
+    LogTarget["All"] = "All";
 })(LogTarget = exports.LogTarget || (exports.LogTarget = {}));
 var LogLevel;
 (function (LogLevel) {

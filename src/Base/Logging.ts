@@ -21,8 +21,13 @@ export class Logging {
                 if(typeof(msg)=="string")
                     console.log(logstring+" "+msg);
                 else {
+                    try {
                     msg = [logstring, ...msg]
                     console.log( ... msg);
+                } catch {
+                        console.log(msg);
+
+                    }
             }
         }
     }

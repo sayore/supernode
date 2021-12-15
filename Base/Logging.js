@@ -39,8 +39,13 @@ class Logging {
                 if (typeof (msg) == "string")
                     console.log(logstring + " " + msg);
                 else {
-                    msg = [logstring, ...msg];
-                    console.log(...msg);
+                    try {
+                        msg = [logstring, ...msg];
+                        console.log(...msg);
+                    }
+                    catch (_a) {
+                        console.log(msg);
+                    }
                 }
             }
     }

@@ -25,7 +25,7 @@ export class Logging {
                     msg = [logstring, ...msg]
                     console.log( ... msg);
                 } catch {
-                        console.log(msg);
+                    console.log(logstring+" "+msg);
 
                     }
             }

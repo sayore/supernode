@@ -44,7 +44,7 @@ class Logging {
                         console.log(...msg);
                     }
                     catch (_a) {
-                        console.log(msg);
+                        console.log(logstring + " " + msg);
                     }
                 }
             }

@@ -32,11 +32,14 @@ class Logging {
                 case LogTarget.All:
                     logToFile(level, logstring, msg);
                     logToConsole(msg, logstring);
+                    break;
                 case LogTarget.Textfile:
                     // Log to file
                     logToFile(level, logstring, msg);
+                    break;
                 case LogTarget.Console:
                     logToConsole(msg, logstring);
+                    break;
             }
         }
     }

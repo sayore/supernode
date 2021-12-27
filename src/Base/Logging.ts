@@ -5,7 +5,7 @@ export class Logging {
     private static loggingActiveOn: { ll: LogLevel, to: LogTarget }[] = []
     static log(msg: any[] | any, level: LogLevel | string = LogLevel.Unknown) {
         var t = new Date();
-        let logstring = "[ " + level.padEnd(10, ' ') + t.getDay().toString().padStart(2, "0") + "." + t.getMonth().toString().padStart(2, "0") + "." + t.getFullYear() + " " + t.getHours().toString().padStart(2, "0") + ":" + t.getMinutes().toString().padStart(2, "0") + ":" + t.getSeconds().toString().padStart(2, "0") + "." + t.getMilliseconds().toString().padStart(4, "0") + " ]"
+        let logstring = "[ " + level.padEnd(10, ' ') + t.getDate().toString().padStart(2, "0") + "." + (t.getMonth()+1).toString().padStart(2, "0") + "." + t.getFullYear() + " " + t.getHours().toString().padStart(2, "0") + ":" + t.getMinutes().toString().padStart(2, "0") + ":" + t.getSeconds().toString().padStart(2, "0") + "." + t.getMilliseconds().toString().padStart(4, "0") + " ]"
         if (!this.interactiveMode) {
             let logTarget = this.loggingActiveOn.find(lao => lao.ll == level)?.to;
             switch ((logTarget ? logTarget : LogTarget.Console)) {

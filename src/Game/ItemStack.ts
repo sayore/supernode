@@ -14,4 +14,6 @@ export class ItemStack extends Activateable {
   getName() { return this.Item.Name;}
   getDescription() { return this.Item.Description;}
   getId() { return this.Item.Id;}
+  getCanonicalId() { return this.Item.CanonicalId;}
+
 }

@@ -7,4 +7,5 @@ export declare class ItemStack extends Activateable {
     getName(): string;
     getDescription(): string;
     getId(): number;
+    getCanonicalId(): string;
 }

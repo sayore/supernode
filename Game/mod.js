@@ -14,4 +14,5 @@ __exportStar(require("./Activateable"), exports);
 __exportStar(require("./Entity"), exports);
 __exportStar(require("./Item"), exports);
 __exportStar(require("./ItemStack"), exports);
+__exportStar(require("./ItemDB"), exports);
 //# sourceMappingURL=mod.js.map

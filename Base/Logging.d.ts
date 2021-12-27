@@ -1,10 +1,8 @@
 export declare class Logging {
-    static interactiveMode: boolean;
-    static loggingActiveOn: {
-        ll: LogLevel;
-        to: LogTarget;
-    }[];
+    private static interactiveMode;
+    private static loggingActiveOn;
     static log(msg: any[] | any, level?: LogLevel | string): void;
+    static setLogTarget(ll: LogLevel, lt: LogTarget): void;
 }
 export declare class InteractiveLogging {
     draw: any[];
@@ -13,6 +11,7 @@ export declare class InteractiveLogging {
 export declare enum LogTarget {
     Console = "TTY",
     Textfile = "TF",
+    Null = "NULL",
     All = "All"
 }
 export declare enum LogLevel {

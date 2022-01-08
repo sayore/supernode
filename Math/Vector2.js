@@ -3,16 +3,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Vector2 = void 0;
 const MathExt_1 = require("./MathExt");
 class Vector2 {
-    constructor(x = 0, y) {
+    constructor(x = 0, y = x) {
         this.x = x;
         this.y = y;
-        if (x != 0 && y == undefined)
-            this.y = x;
     }
     negate() {
         this.x = -this.x;
         this.y = -this.y;
         return this;
+    }
+    static from(props) {
+        if (!props.x)
+            props.x = 0;
+        if (!props.y)
+            props.y = props.x;
+        Object.assign(this, props);
+    }
+    static equals(vec1, vec2) {
+        return vec1.y == vec2.y && vec1.x == vec2.x;
+    }
+    equals(vec) {
+        return Vector2.equals(this, vec);
     }
     static get Zero() { return this._Zero; }
     static get One() { return this._One; }

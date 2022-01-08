@@ -2,7 +2,13 @@ export declare class Vector2 {
     x: number;
     y: number;
     negate(): Vector2;
-    constructor(x: number, y: number);
+    constructor(x?: number, y?: number);
+    static from(props: {
+        x?: number;
+        y?: number;
+    }): void;
+    static equals(vec1: Vector2, vec2: Vector2): boolean;
+    equals(vec: Vector2): boolean;
     private static _Zero;
     static get Zero(): Vector2;
     private static _One;

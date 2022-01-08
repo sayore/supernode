@@ -6,12 +6,13 @@ export class ExpressApplication implements Application {
     uid: string;
     app: express.Application;
     port: number;
-    constructor(port: number) {
+    standalone:boolean;
+    constructor(port: number, standalone:boolean=false) {
         let app = express();
-        
         this.port = port;
-
         this.app = app;
+
+        this.standalone=standalone;
     }
     error?(eventdata?: any): void {
         
@@ -23,7 +24,11 @@ export class ExpressApplication implements Application {
         
     }
     async run(eventdata?: any) {
-        
+        if(this.standalone)
+        {
+            this.init();
+            this.app.listen(this.port);
+        }
     }
     typeOfApplication?: TypeOfApplication;
     needsSafeMode?: SafetyMode;

@@ -6,7 +6,7 @@ export declare class Vector2 {
     static from(props: {
         x?: number;
         y?: number;
-    }): void;
+    }): Vector2;
     static equals(vec1: Vector2, vec2: Vector2): boolean;
     equals(vec: Vector2): boolean;
     private static _Zero;

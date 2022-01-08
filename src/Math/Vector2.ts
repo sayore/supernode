@@ -15,10 +15,10 @@ export class Vector2 {
     static from(props: {
         x?: number,
         y?: number
-    }){
+    }) : Vector2{
         if(!props.x) props.x=0;
         if(!props.y) props.y=props.x;
-        Object.assign(this,props);
+        return new Vector2(props.x,props.y)
     }
 
     static equals(vec1:Vector2,vec2:Vector2) {

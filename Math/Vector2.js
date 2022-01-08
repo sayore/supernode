@@ -17,7 +17,7 @@ class Vector2 {
             props.x = 0;
         if (!props.y)
             props.y = props.x;
-        Object.assign(this, props);
+        return new Vector2(props.x, props.y);
     }
     static equals(vec1, vec2) {
         return vec1.y == vec2.y && vec1.x == vec2.x;

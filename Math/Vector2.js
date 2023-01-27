@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Vector2 = void 0;
 const MathExt_1 = require("./MathExt");
 class Vector2 {
-    constructor(x = 0, y = x) {
-        this.x = x;
-        this.y = y;
-    }
     negate() {
         this.x = -this.x;
         this.y = -this.y;
         return this;
+    }
+    constructor(x = 0, y = x) {
+        this.x = x;
+        this.y = y;
     }
     static from(props) {
         if (!props.x)

@@ -7,3 +7,4 @@ export * as Discord from './Discord/mod';
 export * as Express from './Express/mod';
 export * as Database from './Database/mod';
 export * as Time from './Time/mod';
+export * as Event from './Event/mod';

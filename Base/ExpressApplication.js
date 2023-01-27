@@ -22,12 +22,13 @@ exports.ExpressApplication = void 0;
 const Application_1 = require("./Application");
 const express_1 = __importDefault(require("express"));
 class ExpressApplication {
-    constructor(port) {
+    constructor(port, standalone = false) {
         _ExpressApplication_instances.add(this);
         this.Type = Application_1.TypeOfApplication.Express;
         let app = (0, express_1.default)();
         this.port = port;
         this.app = app;
+        this.standalone = standalone;
     }
     error(eventdata) {
     }
@@ -37,6 +38,10 @@ class ExpressApplication {
     }
     run(eventdata) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (this.standalone) {
+                this.init();
+                this.app.listen(this.port);
+            }
         });
     }
     getMiddleware() {

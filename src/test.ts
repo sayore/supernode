@@ -1,9 +1,16 @@
 import { Logging, LogLevel, LogTarget } from "./Base/Logging";
+import { Item } from "./Game/Item";
 
-Logging.loggingActiveOn.push({ll:LogLevel.Testing , to:LogTarget.Textfile});
+Logging.setLogTarget(LogLevel.Testing , LogTarget.All);
 Logging.log("Test",LogLevel.Testing);
 Logging.log(["Test",5,undefined])
 
+
+Logging.log(JSON.stringify(new Item({
+    Id:0,
+    CanonicalId:"air",
+    Name:"Fish"
+})))
 /*
 process.stdout.write('\n\n\n\n\n\n\n\n\n')
 process.stdout.cursorTo(0, 0, () => {

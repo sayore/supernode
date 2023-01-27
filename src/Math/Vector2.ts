@@ -9,8 +9,23 @@ export class Vector2 {
 
     constructor(
         public x: number = 0,
-        public y: number) {
-        if (x != 0 && y == undefined) this.y = x;
+        public y: number = x) {
+    }
+
+    static from(props: {
+        x?: number,
+        y?: number
+    }) : Vector2{
+        if(!props.x) props.x=0;
+        if(!props.y) props.y=props.x;
+        return new Vector2(props.x,props.y)
+    }
+
+    static equals(vec1:Vector2,vec2:Vector2) {
+        return vec1.y==vec2.y && vec1.x==vec2.x;
+    }
+    equals(vec:Vector2) {
+        return  Vector2.equals(this,vec);
     }
 
     private static _Zero: Vector2 = new Vector2(0, 0);
@@ -241,4 +256,5 @@ export class Vector2 {
     asString() {
         return this.x.toFixed(2) + ", " + this.y.toFixed(2);
     }
+
 }

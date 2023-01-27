@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Database = exports.Express = exports.Discord = exports.Packages = exports.Math = exports.Game = exports.String = exports.Base = void 0;
+exports.Time = exports.Database = exports.Express = exports.Discord = exports.Packages = exports.Math = exports.Game = exports.String = exports.Base = void 0;
 exports.Base = __importStar(require("./Base/mod"));
 exports.String = __importStar(require("./String/mod"));
 exports.Game = __importStar(require("./Game/mod"));
@@ -28,5 +28,6 @@ exports.Packages = __importStar(require("./Packages/mod"));
 exports.Discord = __importStar(require("./Discord/mod"));
 exports.Express = __importStar(require("./Express/mod"));
 exports.Database = __importStar(require("./Database/mod"));
+exports.Time = __importStar(require("./Time/mod"));
 //export * as Server from './Server/mod' 
 //# sourceMappingURL=main.js.map

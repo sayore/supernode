@@ -6,7 +6,8 @@ export declare class ExpressApplication implements Application {
     uid: string;
     app: express.Application;
     port: number;
-    constructor(port: number);
+    standalone: boolean;
+    constructor(port: number, standalone?: boolean);
     error?(eventdata?: any): void;
     exit?(eventdata?: any): void;
     init?(eventdata?: any): void;

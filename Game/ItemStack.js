@@ -10,6 +10,7 @@ class ItemStack extends Activateable_1.Activateable {
     getName() { return this.Item.Name; }
     getDescription() { return this.Item.Description; }
     getId() { return this.Item.Id; }
+    getCanonicalId() { return this.Item.CanonicalId; }
 }
 exports.ItemStack = ItemStack;
 //# sourceMappingURL=ItemStack.js.map

@@ -16,5 +16,3 @@ export class Chance {
             return chanceables[i - 1];
         }
 }
-
-

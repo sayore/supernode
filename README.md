@@ -9,6 +9,7 @@ This is my personal libary for Typescript in node. It includes a lot of stuff yo
 - [ ] Add the MySQL/MongoDB based Event handler
 - [ ] Vector3
 - [ ] Quarternion
+- [ ] Canvas Helper
 
 ## Building
 

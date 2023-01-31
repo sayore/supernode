@@ -7,6 +7,8 @@ This is my personal libary for Typescript in node. It includes a lot of stuff yo
 - [ ] Date functions(maybe, i know there is stuff in vanilla JS for this)
 - [ ] Typecheck avail everything important
 - [ ] Add the MySQL/MongoDB based Event handler
+- [ ] Vector3
+- [ ] Quarternion
 
 ## Building
 

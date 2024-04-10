@@ -31,6 +31,9 @@ export class Logging {
             case level = LogLevel.Testing:
                 logstring="[ "+llevel.cyan+" "+ldate.cyan+" ]"
                 break;
+            case level = LogLevel.Info:
+                logstring="[ "+llevel.yellow+" "+ldate.yellow+" ]"
+                break;
             case level = LogLevel.Raw:
                 logstring="[ "+llevel.red+" "+ldate.red+" ]"
                 break;
@@ -84,6 +87,7 @@ export enum LogLevel {
     Verbose = "Verbose",
     Testing = "Testing",
     Raw = "Testing",
+    Info = "Info",
     Report = "Report",
     GReport = "GReport",
     NReport = "NReport"

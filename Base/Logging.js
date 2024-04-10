@@ -29,7 +29,42 @@ class Logging {
     static log(msg, level = LogLevel.Unknown) {
         var _a;
         var t = new Date();
-        let logstring = "[ " + level.padEnd(10, ' ') + t.getDate().toString().padStart(2, "0") + "." + (t.getMonth() + 1).toString().padStart(2, "0") + "." + t.getFullYear() + " " + t.getHours().toString().padStart(2, "0") + ":" + t.getMinutes().toString().padStart(2, "0") + ":" + t.getSeconds().toString().padStart(2, "0") + "." + t.getMilliseconds().toString().padStart(4, "0") + " ]";
+        let logstring = "";
+        function logStringDefault() {
+            return [
+                level.padEnd(10, ' '),
+                t.getDate().toString().padStart(2, "0") + "." + (t.getMonth() + 1).toString().padStart(2, "0") + "." + t.getFullYear() + " " + t.getHours().toString().padStart(2, "0") + ":" + t.getMinutes().toString().padStart(2, "0") + ":" + t.getSeconds().toString().padStart(2, "0")
+            ];
+        }
+        let [llevel, ldate] = logStringDefault();
+        switch (level) {
+            case level = LogLevel.Report:
+                logstring = "[ " + llevel.green + " " + ldate.green + " ]";
+                break;
+            case level = LogLevel.GReport:
+                logstring = "[ " + llevel.green + " " + ldate.green + " ]";
+                break;
+            case level = LogLevel.NReport:
+                logstring = "[ " + llevel.red + " " + ldate.red + " ]";
+                break;
+            case level = LogLevel.Normal:
+                logstring = "[ " + llevel.white + " " + ldate.yellow + " ]";
+                break;
+            case level = LogLevel.Verbose:
+                logstring = "[ " + llevel.blue + " " + ldate.blue + " ]";
+                break;
+            case level = LogLevel.Testing:
+                logstring = "[ " + llevel.cyan + " " + ldate.cyan + " ]";
+                break;
+            case level = LogLevel.Info:
+                logstring = "[ " + llevel.yellow + " " + ldate.yellow + " ]";
+                break;
+            case level = LogLevel.Raw:
+                logstring = "[ " + llevel.red + " " + ldate.red + " ]";
+                break;
+            default:
+                logstring = "[ " + llevel.grey + " " + ldate.grey + " ]";
+        }
         if (!this.interactiveMode) {
             let logTarget = (_a = this.loggingActiveOn.find(lao => lao.ll == level)) === null || _a === void 0 ? void 0 : _a.to;
             switch ((logTarget ? logTarget : LogTarget.Console)) {
@@ -76,15 +111,19 @@ var LogTarget;
     LogTarget["Textfile"] = "TF";
     LogTarget["Null"] = "NULL";
     LogTarget["All"] = "All";
-})(LogTarget = exports.LogTarget || (exports.LogTarget = {}));
+})(LogTarget || (exports.LogTarget = LogTarget = {}));
 var LogLevel;
 (function (LogLevel) {
     LogLevel["Unknown"] = "Unknown";
     LogLevel["Normal"] = "Normal";
     LogLevel["Verbose"] = "Verbose";
     LogLevel["Testing"] = "Testing";
+    LogLevel["Raw"] = "Testing";
+    LogLevel["Info"] = "Info";
     LogLevel["Report"] = "Report";
-})(LogLevel = exports.LogLevel || (exports.LogLevel = {}));
+    LogLevel["GReport"] = "GReport";
+    LogLevel["NReport"] = "NReport";
+})(LogLevel || (exports.LogLevel = LogLevel = {}));
 function logToConsole(msg, logstring) {
     if (typeof (msg) == "string")
         console.log(logstring + " " + msg);

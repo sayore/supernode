@@ -19,5 +19,9 @@ export declare enum LogLevel {
     Normal = "Normal",
     Verbose = "Verbose",
     Testing = "Testing",
-    Report = "Report"
+    Raw = "Testing",
+    Info = "Info",
+    Report = "Report",
+    GReport = "GReport",
+    NReport = "NReport"
 }

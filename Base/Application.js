@@ -41,12 +41,12 @@ var TypeOfApplication;
     TypeOfApplication["BackgroundProcess"] = "Background Application";
     TypeOfApplication["Database"] = "Database Application";
     TypeOfApplication["NoInteraction"] = "None Application";
-})(TypeOfApplication = exports.TypeOfApplication || (exports.TypeOfApplication = {}));
+})(TypeOfApplication || (exports.TypeOfApplication = TypeOfApplication = {}));
 var SafetyMode;
 (function (SafetyMode) {
     SafetyMode[SafetyMode["NeedsCatch"] = 0] = "NeedsCatch";
     SafetyMode[SafetyMode["Safe"] = 1] = "Safe";
     SafetyMode[SafetyMode["OnceNeedsCatch"] = 2] = "OnceNeedsCatch";
     SafetyMode[SafetyMode["Once"] = 3] = "Once";
-})(SafetyMode = exports.SafetyMode || (exports.SafetyMode = {}));
+})(SafetyMode || (exports.SafetyMode = SafetyMode = {}));
 //# sourceMappingURL=Application.js.map

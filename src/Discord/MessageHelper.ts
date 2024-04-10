@@ -16,7 +16,6 @@ export class MessageHelper {
     }
 
     static isRepliant(msg:Discord.Message, userid:string) {
-        
         if(this.hasRepliant(msg))
         {
             console.log(console.log(msg.mentions.repliedUser.id))

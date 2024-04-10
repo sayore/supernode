@@ -1,11 +1,42 @@
 import * as fs from "fs-extra";
-
+import colors from "colors";
 export class Logging {
     private static interactiveMode: boolean = false;
     private static loggingActiveOn: { ll: LogLevel, to: LogTarget }[] = []
     static log(msg: any[] | any, level: LogLevel | string = LogLevel.Unknown) {
         var t = new Date();
-        let logstring = "[ " + level.padEnd(10, ' ') + t.getDate().toString().padStart(2, "0") + "." + (t.getMonth()+1).toString().padStart(2, "0") + "." + t.getFullYear() + " " + t.getHours().toString().padStart(2, "0") + ":" + t.getMinutes().toString().padStart(2, "0") + ":" + t.getSeconds().toString().padStart(2, "0") + "." + t.getMilliseconds().toString().padStart(4, "0") + " ]"
+        let logstring = "";
+        function logStringDefault() {
+            return [ 
+                level.padEnd(10, ' '),
+                t.getDate().toString().padStart(2, "0") + "." + (t.getMonth()+1).toString().padStart(2, "0") + "." + t.getFullYear() + " " + t.getHours().toString().padStart(2, "0") + ":" + t.getMinutes().toString().padStart(2, "0") + ":" + t.getSeconds().toString().padStart(2, "0")];
+        }
+        let [llevel,ldate] = logStringDefault();
+        switch(level) {
+            case level = LogLevel.Report:
+                logstring="[ "+llevel.green+" "+ldate.green+" ]"
+                break;
+            case level = LogLevel.GReport:
+                logstring="[ "+llevel.green+" "+ldate.green+" ]"
+                break;
+            case level = LogLevel.NReport:
+                logstring="[ "+llevel.red+" "+ldate.red+" ]"
+                break;
+            case level = LogLevel.Normal:
+                logstring="[ "+llevel.white+" "+ldate.yellow+" ]"
+                break;
+            case level = LogLevel.Verbose:
+                logstring="[ "+llevel.blue+" "+ldate.blue+" ]"
+                break;
+            case level = LogLevel.Testing:
+                logstring="[ "+llevel.cyan+" "+ldate.cyan+" ]"
+                break;
+            case level = LogLevel.Raw:
+                logstring="[ "+llevel.red+" "+ldate.red+" ]"
+                break;
+            default:
+                logstring="[ "+llevel.grey+" "+ldate.grey+" ]"
+        }
         if (!this.interactiveMode) {
             let logTarget = this.loggingActiveOn.find(lao => lao.ll == level)?.to;
             switch ((logTarget ? logTarget : LogTarget.Console)) {
@@ -52,7 +83,10 @@ export enum LogLevel {
     Normal = "Normal",
     Verbose = "Verbose",
     Testing = "Testing",
-    Report = "Report"
+    Raw = "Testing",
+    Report = "Report",
+    GReport = "GReport",
+    NReport = "NReport"
 }
 
 function logToConsole(msg: any, logstring: string) {

@@ -11,20 +11,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LevelHelper = void 0;
 class LevelHelper {
-    static increase(db, key, amount = 1) {
-        return __awaiter(this, void 0, void 0, function* () {
+    static increase(db_1, key_1) {
+        return __awaiter(this, arguments, void 0, function* (db, key, amount = 1) {
             let val = yield LevelHelper.getCheckd(db, key, 0);
             return yield db.put(key, val + amount);
         });
     }
-    static decrease(db, key, amount = 1) {
-        return __awaiter(this, void 0, void 0, function* () {
+    static decrease(db_1, key_1) {
+        return __awaiter(this, arguments, void 0, function* (db, key, amount = 1) {
             let val = yield LevelHelper.getCheckd(db, key, 0);
             return yield db.put(key, val - amount);
         });
     }
-    static getCheckd(db, key, defaultval = undefined) {
-        return __awaiter(this, void 0, void 0, function* () {
+    static getCheckd(db_1, key_1) {
+        return __awaiter(this, arguments, void 0, function* (db, key, defaultval = undefined) {
             if (!(yield db.exists(key))) {
                 yield db.put(key, defaultval);
             }

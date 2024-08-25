@@ -39,7 +39,8 @@ class ExpressApplication {
     run(eventdata) {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.standalone) {
-                this.init();
+                if (this.init)
+                    this.init();
                 this.app.listen(this.port);
             }
         });

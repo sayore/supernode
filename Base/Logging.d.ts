@@ -5,7 +5,7 @@ export declare class Logging {
     static setLogTarget(ll: LogLevel, lt: LogTarget): void;
 }
 export declare class InteractiveLogging {
-    draw: any[];
+    draw: never[];
     registerDraw(drawFunc: () => void): void;
 }
 export declare enum LogTarget {

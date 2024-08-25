@@ -4,8 +4,8 @@ export declare class ItemStack extends Activateable {
     Item: Item;
     Amount: number;
     constructor();
-    getName(): string;
-    getDescription(): string;
+    getName(): string | undefined;
+    getDescription(): string | undefined;
     getId(): number;
     getCanonicalId(): string;
 }

@@ -70,6 +70,7 @@ export class Logging {
 export class InteractiveLogging {
     draw = [];
     registerDraw(drawFunc: () => void) {
+        if (!drawFunc)
         this.draw.push(drawFunc);
     }
 }

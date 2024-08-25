@@ -19,18 +19,21 @@ class ApplicationCollection {
     }
     error(eventdata) {
         this.applications.forEach((app) => {
-            app.error(eventdata);
+            if (app.error)
+                app.error(eventdata);
         });
     }
     exit(eventdata) {
         this.applications.forEach((app) => {
-            app.exit(eventdata);
+            if (app.exit)
+                app.exit(eventdata);
         });
     }
     init(eventdata) {
         this.applications.forEach((app) => {
             app.Parent = this;
-            app.init(eventdata);
+            if (app.init)
+                app.init(eventdata);
         });
     }
     run(eventdata) {
@@ -42,8 +45,10 @@ class ApplicationCollection {
                     app.run(eventdata);
                 }
                 catch (e) {
-                    app.error(e);
-                    app.restart();
+                    if (app.error)
+                        app.error(e);
+                    if (app.restart)
+                        app.restart();
                 }
         }));
         if (!!ExpressApplicationHandler_1.ExpressApplicationHandler)

@@ -10,17 +10,20 @@ export class ApplicationCollection implements IApplicationCollection, ITypeable,
     uid: string;
     error?(eventdata?: any): void {
         this.applications.forEach((app) => {
+            if(app.error)
             app.error(eventdata);
         });
     }
     exit?(eventdata?: any): void {
         this.applications.forEach((app) => {
+            if(app.exit)
             app.exit(eventdata);
         });
     }
     init?(eventdata?: any): void {
         this.applications.forEach((app) => {
             app.Parent = this;
+            if(app.init)
             app.init(eventdata);
         });
     }
@@ -32,7 +35,9 @@ export class ApplicationCollection implements IApplicationCollection, ITypeable,
             try {
                 app.run(eventdata);
             } catch(e) {
+                if(app.error)
                 app.error(e);
+                if(app.restart)
                 app.restart();
             }
         });

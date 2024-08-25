@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 
 export class MessageHelper {
     static getSendersVisibleName(msg:Discord.Message) {
-        return msg.member.displayName
+        return msg?.member?.displayName
     }
     
     static getRepliantsVisibleName(msg:Discord.Message) {
@@ -18,8 +18,9 @@ export class MessageHelper {
     static isRepliant(msg:Discord.Message, userid:string) {
         if(this.hasRepliant(msg))
         {
-            console.log(console.log(msg.mentions.repliedUser.id))
-            console.log(userid)
+            //console.log(console.log(msg.mentions.repliedUser.id))
+            //console.log(userid)
+            if(msg?.mentions?.repliedUser?.id)
             return msg.mentions.repliedUser.id == userid
         }
         else

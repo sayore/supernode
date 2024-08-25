@@ -26,6 +26,7 @@ export class ExpressApplication implements Application {
     async run(eventdata?: any) {
         if(this.standalone)
         {
+            if(this.init)
             this.init();
             this.app.listen(this.port);
         }

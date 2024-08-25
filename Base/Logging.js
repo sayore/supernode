@@ -101,7 +101,8 @@ class InteractiveLogging {
         this.draw = [];
     }
     registerDraw(drawFunc) {
-        this.draw.push(drawFunc);
+        if (!drawFunc)
+            this.draw.push(drawFunc);
     }
 }
 exports.InteractiveLogging = InteractiveLogging;

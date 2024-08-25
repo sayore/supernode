@@ -22,9 +22,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LogLevel = exports.LogTarget = exports.InteractiveLogging = exports.Logging = void 0;
 const fs = __importStar(require("fs-extra"));
+const chalk_1 = __importDefault(require("chalk"));
 class Logging {
     static log(msg, level = LogLevel.Unknown) {
         var _a;
@@ -39,31 +43,31 @@ class Logging {
         let [llevel, ldate] = logStringDefault();
         switch (level) {
             case level = LogLevel.Report:
-                logstring = "[ " + llevel.green + " " + ldate.green + " ]";
+                logstring = `[ ${chalk_1.default.green(llevel)} ${chalk_1.default.green(ldate)} ]`;
                 break;
             case level = LogLevel.GReport:
-                logstring = "[ " + llevel.green + " " + ldate.green + " ]";
+                logstring = `[ ${chalk_1.default.green(llevel)} ${chalk_1.default.green(ldate)} ]`;
                 break;
             case level = LogLevel.NReport:
-                logstring = "[ " + llevel.red + " " + ldate.red + " ]";
+                logstring = `[ ${chalk_1.default.red(llevel)} ${chalk_1.default.red(ldate)} ]`;
                 break;
             case level = LogLevel.Normal:
-                logstring = "[ " + llevel.white + " " + ldate.yellow + " ]";
+                logstring = `[ ${chalk_1.default.white(llevel)} ${chalk_1.default.yellow(ldate)} ]`;
                 break;
             case level = LogLevel.Verbose:
-                logstring = "[ " + llevel.blue + " " + ldate.blue + " ]";
+                logstring = `[ ${chalk_1.default.blue(llevel)} ${chalk_1.default.blue(ldate)} ]`;
                 break;
             case level = LogLevel.Testing:
-                logstring = "[ " + llevel.cyan + " " + ldate.cyan + " ]";
+                logstring = `[ ${chalk_1.default.cyan(llevel)} ${chalk_1.default.cyan(ldate)} ]`;
                 break;
             case level = LogLevel.Info:
-                logstring = "[ " + llevel.yellow + " " + ldate.yellow + " ]";
+                logstring = `[ ${chalk_1.default.yellow(llevel)} ${chalk_1.default.yellow(ldate)} ]`;
                 break;
             case level = LogLevel.Raw:
-                logstring = "[ " + llevel.red + " " + ldate.red + " ]";
+                logstring = `[ ${chalk_1.default.red(llevel)} ${chalk_1.default.red(ldate)} ]`;
                 break;
             default:
-                logstring = "[ " + llevel.grey + " " + ldate.grey + " ]";
+                logstring = `[ ${chalk_1.default.grey(llevel)} ${chalk_1.default.grey(ldate)} ]`;
         }
         if (!this.interactiveMode) {
             let logTarget = (_a = this.loggingActiveOn.find(lao => lao.ll == level)) === null || _a === void 0 ? void 0 : _a.to;

@@ -1,6 +1,6 @@
-import { ApplicationCollection } from "./ApplicationCollection";
-import { IApplication } from "./IApplication";
-import { ITypeable } from "./ITypeable";
+import { ApplicationCollection } from "./ApplicationCollection.js";
+import { IApplication } from "./IApplication.js";
+import { ITypeable } from "./ITypeable.js";
 
 export class Application implements IApplication, ITypeable{
     Type: string | TypeOfApplication = TypeOfApplication.NoInteraction;

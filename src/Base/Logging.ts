@@ -1,5 +1,6 @@
 import * as fs from "fs-extra";
-import colors from "colors";
+import chalk from 'chalk';
+
 export class Logging {
     private static interactiveMode: boolean = false;
     private static loggingActiveOn: { ll: LogLevel, to: LogTarget }[] = []
@@ -14,31 +15,31 @@ export class Logging {
         let [llevel,ldate] = logStringDefault();
         switch(level) {
             case level = LogLevel.Report:
-                logstring="[ "+llevel.green+" "+ldate.green+" ]"
+                logstring = `[ ${chalk.green(llevel)} ${chalk.green(ldate)} ]`
                 break;
             case level = LogLevel.GReport:
-                logstring="[ "+llevel.green+" "+ldate.green+" ]"
+                logstring = `[ ${chalk.green(llevel)} ${chalk.green(ldate)} ]`
                 break;
             case level = LogLevel.NReport:
-                logstring="[ "+llevel.red+" "+ldate.red+" ]"
+                logstring = `[ ${chalk.red(llevel)} ${chalk.red(ldate)} ]`
                 break;
             case level = LogLevel.Normal:
-                logstring="[ "+llevel.white+" "+ldate.yellow+" ]"
+                logstring = `[ ${chalk.white(llevel)} ${chalk.yellow(ldate)} ]`
                 break;
             case level = LogLevel.Verbose:
-                logstring="[ "+llevel.blue+" "+ldate.blue+" ]"
+                logstring = `[ ${chalk.blue(llevel)} ${chalk.blue(ldate)} ]`
                 break;
             case level = LogLevel.Testing:
-                logstring="[ "+llevel.cyan+" "+ldate.cyan+" ]"
+                logstring = `[ ${chalk.cyan(llevel)} ${chalk.cyan(ldate)} ]`
                 break;
             case level = LogLevel.Info:
-                logstring="[ "+llevel.yellow+" "+ldate.yellow+" ]"
+                logstring = `[ ${chalk.yellow(llevel)} ${chalk.yellow(ldate)} ]`
                 break;
             case level = LogLevel.Raw:
-                logstring="[ "+llevel.red+" "+ldate.red+" ]"
+                logstring = `[ ${chalk.red(llevel)} ${chalk.red(ldate)} ]`
                 break;
             default:
-                logstring="[ "+llevel.grey+" "+ldate.grey+" ]"
+                logstring = `[ ${chalk.grey(llevel)} ${chalk.grey(ldate)} ]`
         }
         if (!this.interactiveMode) {
             let logTarget = this.loggingActiveOn.find(lao => lao.ll == level)?.to;

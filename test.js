@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Logging_1 = require("./Base/Logging");
-const Item_1 = require("./Game/Item");
-Logging_1.Logging.setLogTarget(Logging_1.LogLevel.Testing, Logging_1.LogTarget.All);
-Logging_1.Logging.log("Test", Logging_1.LogLevel.Testing);
-Logging_1.Logging.log(["Test", 5, undefined]);
-Logging_1.Logging.log(JSON.stringify(new Item_1.Item({
+const Logging_js_1 = require("./Base/Logging.js");
+const Item_js_1 = require("./Game/Item.js");
+Logging_js_1.Logging.setLogTarget(Logging_js_1.LogLevel.Testing, Logging_js_1.LogTarget.All);
+Logging_js_1.Logging.log("Test", Logging_js_1.LogLevel.Testing);
+Logging_js_1.Logging.log(["Test", 5, undefined]);
+Logging_js_1.Logging.log(JSON.stringify(new Item_js_1.Item({
     Id: 0,
     CanonicalId: "air",
     Name: "Fish"

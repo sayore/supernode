@@ -1,4 +1,4 @@
-import { IPackageJSON } from "./IPackageJSON";
+import { IPackageJSON } from "./IPackageJSON.js";
 export declare class PackageManager {
     #private;
     pkgJSON: IPackageJSON;

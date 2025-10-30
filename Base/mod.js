@@ -14,15 +14,15 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./Application"), exports);
-__exportStar(require("./IDrawable"), exports);
-__exportStar(require("./ITypeable"), exports);
-__exportStar(require("./Typecheck"), exports);
-__exportStar(require("./IApplication"), exports);
-__exportStar(require("./IApplicationCollection"), exports);
-__exportStar(require("./ExpressApplication"), exports);
-__exportStar(require("./Application"), exports);
-__exportStar(require("./ApplicationCollection"), exports);
-__exportStar(require("./Environment"), exports);
-__exportStar(require("./Logging"), exports);
+__exportStar(require("./Application.js"), exports);
+__exportStar(require("./IDrawable.js"), exports);
+__exportStar(require("./ITypeable.js"), exports);
+__exportStar(require("./Typecheck.js"), exports);
+__exportStar(require("./IApplication.js"), exports);
+__exportStar(require("./IApplicationCollection.js"), exports);
+__exportStar(require("./ExpressApplication.js"), exports);
+__exportStar(require("./Application.js"), exports);
+__exportStar(require("./ApplicationCollection.js"), exports);
+__exportStar(require("./Environment.js"), exports);
+__exportStar(require("./Logging.js"), exports);
 //# sourceMappingURL=mod.js.map

@@ -1,4 +1,4 @@
-import { Application, TypeOfApplication, SafetyMode } from "./Application";
+import { Application, TypeOfApplication, SafetyMode } from "./Application.js";
 import express from "express";
 export declare class ExpressApplication implements Application {
     #private;

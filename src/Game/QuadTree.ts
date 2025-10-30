@@ -5,7 +5,7 @@ interface Rectangle {
   height: number;
 }
 
-class Quadtree {
+export class Quadtree {
   private root: QuadtreeNode;
 
   constructor(rectangles: Rectangle[]) {

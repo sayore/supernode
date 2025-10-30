@@ -19,12 +19,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _ExpressApplication_instances, _ExpressApplication__createServer, _ExpressApplication__getMiddleware;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExpressApplication = void 0;
-const Application_1 = require("./Application");
+const Application_js_1 = require("./Application.js");
 const express_1 = __importDefault(require("express"));
 class ExpressApplication {
     constructor(port, standalone = false) {
         _ExpressApplication_instances.add(this);
-        this.Type = Application_1.TypeOfApplication.Express;
+        this.Type = Application_js_1.TypeOfApplication.Express;
         let app = (0, express_1.default)();
         this.port = port;
         this.app = app;

@@ -1,9 +1,9 @@
-import { ITypeable } from "./ITypeable";
-import { TypeOfApplication, SafetyMode, Application } from "./Application";
-import { IApplicationCollection } from "./IApplicationCollection";
-import { IApplication } from "./IApplication";
-import { ExpressApplicationHandler } from "../Express/ExpressApplicationHandler"
-import { ExpressApplication } from "./ExpressApplication";
+import { ITypeable } from "./ITypeable.js";
+import { TypeOfApplication, SafetyMode, Application } from "./Application.js";
+import { IApplicationCollection } from "./IApplicationCollection.js";
+import { IApplication } from "./IApplication.js";
+import { ExpressApplicationHandler } from "../Express/ExpressApplicationHandler.js"
+import { ExpressApplication } from "./ExpressApplication.js";
 
 
 export class ApplicationCollection implements IApplicationCollection, ITypeable, IApplication {

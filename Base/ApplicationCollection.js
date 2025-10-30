@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApplicationCollection = void 0;
-const Application_1 = require("./Application");
-const ExpressApplicationHandler_1 = require("../Express/ExpressApplicationHandler");
+const Application_js_1 = require("./Application.js");
+const ExpressApplicationHandler_js_1 = require("../Express/ExpressApplicationHandler.js");
 class ApplicationCollection {
     constructor() {
         this.Type = "ApplicationCollection";
@@ -38,8 +38,8 @@ class ApplicationCollection {
     }
     run(eventdata) {
         this.applications.forEach((app) => __awaiter(this, void 0, void 0, function* () {
-            if (app.Type == Application_1.TypeOfApplication.Express)
-                ExpressApplicationHandler_1.ExpressApplicationHandler.registerSubApp(app);
+            if (app.Type == Application_js_1.TypeOfApplication.Express)
+                ExpressApplicationHandler_js_1.ExpressApplicationHandler.registerSubApp(app);
             else
                 try {
                     app.run(eventdata);
@@ -51,8 +51,8 @@ class ApplicationCollection {
                         app.restart();
                 }
         }));
-        if (!!ExpressApplicationHandler_1.ExpressApplicationHandler)
-            ExpressApplicationHandler_1.ExpressApplicationHandler.run();
+        if (!!ExpressApplicationHandler_js_1.ExpressApplicationHandler)
+            ExpressApplicationHandler_js_1.ExpressApplicationHandler.run();
     }
     addApps(apps) {
         apps.applications.forEach((appl) => { this.applications.push(appl); });

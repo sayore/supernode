@@ -1,4 +1,4 @@
-class GameMap {
+export class GameMap {
   width: number;
   height: number;
   tiles: number[][];

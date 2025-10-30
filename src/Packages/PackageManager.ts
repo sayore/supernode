@@ -1,5 +1,5 @@
-import * as fs from "fs-extra";
-import { IPackageJSON } from "./IPackageJSON";
+import fs from "fs-extra";
+import { IPackageJSON } from "./IPackageJSON.js";
 
 // require.cache lists all loaded modules in a tree
 

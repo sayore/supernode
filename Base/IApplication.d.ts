@@ -1,4 +1,4 @@
-import { TypeOfApplication, SafetyMode } from "./Application";
+import { TypeOfApplication, SafetyMode } from "./Application.js";
 export interface IApplication {
     uid: string;
     /**

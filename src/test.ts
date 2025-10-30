@@ -1,5 +1,5 @@
-import { Logging, LogLevel, LogTarget } from "./Base/Logging";
-import { Item } from "./Game/Item";
+import { Logging, LogLevel, LogTarget } from "./Base/Logging.js";
+import { Item } from "./Game/Item.js";
 
 Logging.setLogTarget(LogLevel.Testing , LogTarget.All);
 Logging.log("Test",LogLevel.Testing);

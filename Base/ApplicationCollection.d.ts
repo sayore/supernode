@@ -1,7 +1,7 @@
-import { ITypeable } from "./ITypeable";
-import { TypeOfApplication, SafetyMode, Application } from "./Application";
-import { IApplicationCollection } from "./IApplicationCollection";
-import { IApplication } from "./IApplication";
+import { ITypeable } from "./ITypeable.js";
+import { TypeOfApplication, SafetyMode, Application } from "./Application.js";
+import { IApplicationCollection } from "./IApplicationCollection.js";
+import { IApplication } from "./IApplication.js";
 export declare class ApplicationCollection implements IApplicationCollection, ITypeable, IApplication {
     uid: string;
     error?(eventdata?: any): void;

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Quadtree = void 0;
 class Quadtree {
     constructor(rectangles) {
         this.root = new QuadtreeNode(rectangles, 0, 0, Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
@@ -11,6 +12,7 @@ class Quadtree {
         return quadrant.getRectangles();
     }
 }
+exports.Quadtree = Quadtree;
 class QuadtreeNode {
     constructor(rectangles, x, y, width, height) {
         this.x = x;

@@ -1,14 +1,22 @@
 import * as fs from "fs-extra";
 import chalk from 'chalk';
 
+/**
+ * A static class for handling logging throughout the application.
+ */
 export class Logging {
     private static interactiveMode: boolean = false;
     private static loggingActiveOn: { ll: LogLevel, to: LogTarget }[] = []
+    /**
+     * Logs a message with a specified log level.
+     * @param msg The message to log. Can be a single value or an array of values.
+     * @param level The log level. Defaults to LogLevel.Unknown.
+     */
     static log(msg: any[] | any, level: LogLevel | string = LogLevel.Unknown) {
         var t = new Date();
         let logstring = "";
         function logStringDefault() {
-            return [ 
+            return [
                 level.padEnd(10, ' '),
                 t.getDate().toString().padStart(2, "0") + "." + (t.getMonth()+1).toString().padStart(2, "0") + "." + t.getFullYear() + " " + t.getHours().toString().padStart(2, "0") + ":" + t.getMinutes().toString().padStart(2, "0") + ":" + t.getSeconds().toString().padStart(2, "0")];
         }
@@ -58,6 +66,11 @@ export class Logging {
             }
         }
     }
+    /**
+     * Sets the log target for a specific log level.
+     * @param ll The log level to configure.
+     * @param lt The target for the log level.
+     */
     static setLogTarget(ll:LogLevel,lt:LogTarget) {
         let lao = this.loggingActiveOn.findIndex(lao => lao.ll == ll);
         if(lao==-1) {
@@ -68,6 +81,9 @@ export class Logging {
     }
 }
 
+/**
+ * A class for handling interactive logging, such as progress bars or animations.
+ */
 export class InteractiveLogging {
     draw = [];
     registerDraw(drawFunc: () => void) {
@@ -76,6 +92,9 @@ export class InteractiveLogging {
     }
 }
 
+/**
+ * Defines the possible targets for logging.
+ */
 export enum LogTarget {
     Console = "TTY",
     Textfile = "TF",
@@ -83,6 +102,9 @@ export enum LogTarget {
     All = "All"
 }
 
+/**
+ * Defines the different levels of logging.
+ */
 export enum LogLevel {
     Unknown = "Unknown",
     Normal = "Normal",
@@ -95,6 +117,12 @@ export enum LogLevel {
     NReport = "NReport"
 }
 
+/**
+ * Logs a message to the console.
+ * @param msg The message to log.
+ * @param logstring The formatted log string.
+ * @returns The original message.
+ */
 function logToConsole(msg: any, logstring: string) {
     if (typeof (msg) == "string")
         console.log(logstring + " " + msg);
@@ -110,6 +138,12 @@ function logToConsole(msg: any, logstring: string) {
     return msg;
 }
 
+/**
+ * Logs a message to a file.
+ * @param level The log level, used to determine the file name.
+ * @param logstring The formatted log string.
+ * @param msg The message to log.
+ */
 function logToFile(level: string, logstring: string, msg: any) {
     fs.ensureFileSync('./log/' + level + ".log");
     fs.appendFileSync('./log/' + level + ".log", logstring + " " + msg + "\n");

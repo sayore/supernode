@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "module": "nodenext", 
-        "target": "es6",
+        "target": "ES2022",
         "moduleResolution": "NodeNext",
         "lib": [
             "ES2023",
@@ -9,6 +9,7 @@
         ],
         "sourceMap": true,
         "declaration": true,
+        "experimentalDecorators": true,
         "noEmit": false,
         "checkJs": false,
         "outDir": "./",
@@ -22,5 +23,5 @@
     ],
     "exclude": [
         "node_modules"
-    ]
+    ],    
 }

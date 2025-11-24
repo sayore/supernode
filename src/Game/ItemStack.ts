@@ -1,5 +1,5 @@
-import { Activateable } from "./Activateable";
-import { Item } from "./Item";
+import { Activateable } from "./Activateable.js";
+import { Item } from "./Item.js";
 
 
 export class ItemStack extends Activateable {

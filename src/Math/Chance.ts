@@ -1,4 +1,4 @@
-import { Chanceable } from "./Chanceable";
+import { Chanceable } from "./Chanceable.js";
 
 export class Chance {
         static random(chanceables: Chanceable<any>[]) {

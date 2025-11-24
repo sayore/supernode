@@ -1,5 +1,5 @@
-import { Item } from "../Game/Item";
-import { IDrawable } from "./IDrawable";
+import { Item } from "../Game/Item.js";
+import { IDrawable } from "./IDrawable.js";
 
 export class TypeCheck {
     static isDrawable(obj:any) : obj is IDrawable {

@@ -1,1 +1,1 @@
-export * from "./MessageHelper"
+export * from "./MessageHelper.js"

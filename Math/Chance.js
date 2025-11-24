@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Chance = void 0;
-class Chance {
+export class Chance {
     static random(chanceables) {
         // Collect ALL the possible chances (each Item has a certain chance, and we accumulate it)
         var allChances = 0;
@@ -16,5 +13,4 @@ class Chance {
         return chanceables[i - 1];
     }
 }
-exports.Chance = Chance;
 //# sourceMappingURL=Chance.js.map

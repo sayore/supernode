@@ -1,5 +1,5 @@
-export * from "./MathExt"
-export * from "./Vector2"
-export * from "./Chance"
-export * from "./Chanceable"
+export * from "./MathExt.js"
+export * from "./Vector2.js"
+export * from "./Chance.js"
+export * from "./Chanceable.js"
 

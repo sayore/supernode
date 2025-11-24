@@ -1,5 +1,5 @@
-import { Item } from './Item';
-import { ItemStack } from './ItemStack';
+import { Item } from './Item.js';
+import { ItemStack } from './ItemStack.js';
 export declare class ItemDB {
     items: Item[];
     constructor(items: Item[]);

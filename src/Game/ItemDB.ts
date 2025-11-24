@@ -1,5 +1,5 @@
-import { Item } from './Item';
-import { ItemStack } from './ItemStack';
+import { Item } from './Item.js';
+import { ItemStack } from './ItemStack.js';
 import _ from 'lodash';
 
 export class ItemDB {

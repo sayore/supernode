@@ -1,45 +1,17 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LogLevel = exports.LogTarget = exports.InteractiveLogging = exports.Logging = void 0;
-const fs = __importStar(require("fs-extra"));
-const chalk_1 = __importDefault(require("chalk"));
+import fs from "fs-extra";
+import chalk from 'chalk';
 /**
  * A static class for handling logging throughout the application.
  */
-class Logging {
+export class Logging {
+    static interactiveMode = false;
+    static loggingActiveOn = [];
     /**
      * Logs a message with a specified log level.
      * @param msg The message to log. Can be a single value or an array of values.
      * @param level The log level. Defaults to LogLevel.Unknown.
      */
     static log(msg, level = LogLevel.Unknown) {
-        var _a;
         var t = new Date();
         let logstring = "";
         function logStringDefault() {
@@ -51,34 +23,34 @@ class Logging {
         let [llevel, ldate] = logStringDefault();
         switch (level) {
             case level = LogLevel.Report:
-                logstring = `[ ${chalk_1.default.green(llevel)} ${chalk_1.default.green(ldate)} ]`;
+                logstring = `[ ${chalk.green(llevel)} ${chalk.green(ldate)} ]`;
                 break;
             case level = LogLevel.GReport:
-                logstring = `[ ${chalk_1.default.green(llevel)} ${chalk_1.default.green(ldate)} ]`;
+                logstring = `[ ${chalk.green(llevel)} ${chalk.green(ldate)} ]`;
                 break;
             case level = LogLevel.NReport:
-                logstring = `[ ${chalk_1.default.red(llevel)} ${chalk_1.default.red(ldate)} ]`;
+                logstring = `[ ${chalk.red(llevel)} ${chalk.red(ldate)} ]`;
                 break;
             case level = LogLevel.Normal:
-                logstring = `[ ${chalk_1.default.white(llevel)} ${chalk_1.default.yellow(ldate)} ]`;
+                logstring = `[ ${chalk.white(llevel)} ${chalk.yellow(ldate)} ]`;
                 break;
             case level = LogLevel.Verbose:
-                logstring = `[ ${chalk_1.default.blue(llevel)} ${chalk_1.default.blue(ldate)} ]`;
+                logstring = `[ ${chalk.blue(llevel)} ${chalk.blue(ldate)} ]`;
                 break;
             case level = LogLevel.Testing:
-                logstring = `[ ${chalk_1.default.cyan(llevel)} ${chalk_1.default.cyan(ldate)} ]`;
+                logstring = `[ ${chalk.cyan(llevel)} ${chalk.cyan(ldate)} ]`;
                 break;
             case level = LogLevel.Info:
-                logstring = `[ ${chalk_1.default.yellow(llevel)} ${chalk_1.default.yellow(ldate)} ]`;
+                logstring = `[ ${chalk.yellow(llevel)} ${chalk.yellow(ldate)} ]`;
                 break;
             case level = LogLevel.Raw:
-                logstring = `[ ${chalk_1.default.red(llevel)} ${chalk_1.default.red(ldate)} ]`;
+                logstring = `[ ${chalk.red(llevel)} ${chalk.red(ldate)} ]`;
                 break;
             default:
-                logstring = `[ ${chalk_1.default.grey(llevel)} ${chalk_1.default.grey(ldate)} ]`;
+                logstring = `[ ${chalk.grey(llevel)} ${chalk.grey(ldate)} ]`;
         }
         if (!this.interactiveMode) {
-            let logTarget = (_a = this.loggingActiveOn.find(lao => lao.ll == level)) === null || _a === void 0 ? void 0 : _a.to;
+            let logTarget = this.loggingActiveOn.find(lao => lao.ll == level)?.to;
             switch ((logTarget ? logTarget : LogTarget.Console)) {
                 case LogTarget.All:
                     logToFile(level, logstring, msg);
@@ -110,36 +82,30 @@ class Logging {
         ;
     }
 }
-exports.Logging = Logging;
-Logging.interactiveMode = false;
-Logging.loggingActiveOn = [];
 /**
  * A class for handling interactive logging, such as progress bars or animations.
  */
-class InteractiveLogging {
-    constructor() {
-        this.draw = [];
-    }
+export class InteractiveLogging {
+    draw = [];
     registerDraw(drawFunc) {
         if (!drawFunc)
             this.draw.push(drawFunc);
     }
 }
-exports.InteractiveLogging = InteractiveLogging;
 /**
  * Defines the possible targets for logging.
  */
-var LogTarget;
+export var LogTarget;
 (function (LogTarget) {
     LogTarget["Console"] = "TTY";
     LogTarget["Textfile"] = "TF";
     LogTarget["Null"] = "NULL";
     LogTarget["All"] = "All";
-})(LogTarget || (exports.LogTarget = LogTarget = {}));
+})(LogTarget || (LogTarget = {}));
 /**
  * Defines the different levels of logging.
  */
-var LogLevel;
+export var LogLevel;
 (function (LogLevel) {
     LogLevel["Unknown"] = "Unknown";
     LogLevel["Normal"] = "Normal";
@@ -150,7 +116,7 @@ var LogLevel;
     LogLevel["Report"] = "Report";
     LogLevel["GReport"] = "GReport";
     LogLevel["NReport"] = "NReport";
-})(LogLevel || (exports.LogLevel = LogLevel = {}));
+})(LogLevel || (LogLevel = {}));
 /**
  * Logs a message to the console.
  * @param msg The message to log.
@@ -165,7 +131,7 @@ function logToConsole(msg, logstring) {
             msg = [logstring, ...msg];
             console.log(...msg);
         }
-        catch (_a) {
+        catch {
             console.log(logstring + " " + msg);
         }
     }

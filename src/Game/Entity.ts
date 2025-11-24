@@ -1,4 +1,4 @@
-import { ITypeable } from "../Base/ITypeable";
+import { ITypeable } from "../Base/ITypeable.js";
 
 export class Entity implements ITypeable {
     Type: string="CommonEntity";

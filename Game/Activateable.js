@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Activateable = void 0;
-class Activateable {
+export class Activateable {
+    Parent;
     onUse() {
         if (this.Parent)
             this.Parent.onUse();
@@ -11,5 +9,4 @@ class Activateable {
             this.Parent.onDrop();
     }
 }
-exports.Activateable = Activateable;
 //# sourceMappingURL=Activateable.js.map

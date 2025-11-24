@@ -1,31 +1,13 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ApplicationCollection = void 0;
-const Application_js_1 = require("./Application.js");
-const ExpressApplicationHandler_js_1 = require("../Express/ExpressApplicationHandler.js");
+import { TypeOfApplication } from "./Application.js";
+import { ExpressApplicationHandler } from "../Express/ExpressApplicationHandler.js";
 /**
  * A collection of applications that can be managed as a single unit.
  */
-class ApplicationCollection {
-    constructor() {
-        /**
-         * The type of this object.
-         */
-        this.Type = "ApplicationCollection";
-        /**
-         * The list of applications in the collection.
-         */
-        this.applications = [];
-    }
+export class ApplicationCollection {
+    /**
+     * A unique identifier for the application collection.
+     */
+    uid;
     /**
      * Propagates an error to all applications in the collection.
      * @param eventdata Optional data associated with the event.
@@ -62,9 +44,9 @@ class ApplicationCollection {
      * @param eventdata Optional data associated with the event.
      */
     run(eventdata) {
-        this.applications.forEach((app) => __awaiter(this, void 0, void 0, function* () {
-            if (app.Type == Application_js_1.TypeOfApplication.Express)
-                ExpressApplicationHandler_js_1.ExpressApplicationHandler.registerSubApp(app);
+        this.applications.forEach(async (app) => {
+            if (app.Type == TypeOfApplication.Express)
+                ExpressApplicationHandler.registerSubApp(app);
             else
                 try {
                     app.run(eventdata);
@@ -75,10 +57,18 @@ class ApplicationCollection {
                     if (app.restart)
                         app.restart();
                 }
-        }));
-        if (!!ExpressApplicationHandler_js_1.ExpressApplicationHandler)
-            ExpressApplicationHandler_js_1.ExpressApplicationHandler.run();
+        });
+        if (!!ExpressApplicationHandler)
+            ExpressApplicationHandler.run();
     }
+    /**
+     * The type of the application.
+     */
+    typeOfApplication;
+    /**
+     * The safety mode for the application.
+     */
+    needsSafeMode;
     /**
      * Adds a collection of applications to this collection.
      * @param apps The collection of applications to add.
@@ -86,7 +76,18 @@ class ApplicationCollection {
     addApps(apps) {
         apps.applications.forEach((appl) => { this.applications.push(appl); });
     }
+    /**
+     * The type of this object.
+     */
+    Type = "ApplicationCollection";
+    /**
+     * The list of applications in the collection.
+     */
+    applications = [];
+    /**
+     * Optional metadata for the application collection.
+     */
+    meta;
 }
-exports.ApplicationCollection = ApplicationCollection;
 // TODO: Add local Server instance to see running services
 //# sourceMappingURL=ApplicationCollection.js.map

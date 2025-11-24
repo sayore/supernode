@@ -1,8 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ItemStack = void 0;
-const Activateable_1 = require("./Activateable");
-class ItemStack extends Activateable_1.Activateable {
+import { Activateable } from "./Activateable.js";
+export class ItemStack extends Activateable {
+    Item;
+    Amount;
     constructor() {
         super();
         this.Parent = this.Item;
@@ -12,5 +11,4 @@ class ItemStack extends Activateable_1.Activateable {
     getId() { return this.Item.Id; }
     getCanonicalId() { return this.Item.CanonicalId; }
 }
-exports.ItemStack = ItemStack;
 //# sourceMappingURL=ItemStack.js.map

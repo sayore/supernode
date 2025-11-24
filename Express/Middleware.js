@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Middleware = void 0;
-class Middleware {
+export class Middleware {
     static vhost(hostname, server) {
         if (!hostname)
             throw new Error('vhost hostname required');
@@ -26,5 +23,4 @@ class Middleware {
         throw new Error("Not implemented yet.");
     }
 }
-exports.Middleware = Middleware;
 //# sourceMappingURL=Middleware.js.map

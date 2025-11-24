@@ -1,4 +1,4 @@
-import { ExpressApplication } from "../Base/ExpressApplication";
+import { ExpressApplication } from "../Base/ExpressApplication.js";
 declare class _ExpressApplicationHandler extends ExpressApplication {
     private static _instance;
     private constructor();

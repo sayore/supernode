@@ -1,18 +1,22 @@
-import Level from "level-ts";
+import { Level } from "level";
 
-export class LevelHelper {
-    static async increase(db:Level,key:string,amount:number=1) {
-        let val = await LevelHelper.getCheckd(db,key,0);
-        return await db.put(key,val+amount);
+export class LevelHelper<K,V> extends Level<K,V> {
+    async increase(key:K,amount:any=1) {
+        let val = await this.getCheckd(key,0);
+        return await this.put(key,val+amount);
     }
-    static async decrease(db:Level,key:string,amount:number=1) {
-        let val = await LevelHelper.getCheckd(db,key,0);
-        return await db.put(key,val-amount);
+    async decrease(key:K,amount:any=1) {
+        let val = await this.getCheckd(key,0);
+        ///@ts-ignore
+        return await this.put(key,val-amount);
     }
-    static async getCheckd(db:Level,key:string,defaultval:any=undefined) {
-        if(!await db.exists(key)) {
-            await db.put(key,defaultval);
+    async getCheckd(key:K,defaultval:any=undefined) {
+        if(!await this.exists(key)) {
+            await this.put(key,defaultval);
         }
-        return await db.get(key);
+        return await this.get(key);
+    }
+    async exists(key:K) {
+        return !!(await this.get(key));
     }
 }

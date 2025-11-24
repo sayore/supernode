@@ -1,1 +1,1 @@
-{"version":3,"file":"mod.js","sourceRoot":"","sources":["../src/Game/mod.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;AAAA,iDAA8B;AAC9B,2CAAwB;AACxB,yCAAsB;AACtB,8CAA2B;AAC3B,2CAAwB;AACxB,6CAA0B;AAC1B,4CAAyB"}
+{"version":3,"file":"mod.js","sourceRoot":"","sources":["../src/Game/mod.ts"],"names":[],"mappings":"AAAA,cAAc,mBAAmB,CAAC;AAClC,cAAc,aAAa,CAAC;AAC5B,cAAc,WAAW,CAAC;AAC1B,cAAc,gBAAgB,CAAC;AAC/B,cAAc,aAAa,CAAC;AAC5B,cAAc,eAAe,CAAC;AAC9B,cAAc,cAAc,CAAC"}

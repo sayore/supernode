@@ -1,8 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Vector2 = void 0;
-const MathExt_1 = require("./MathExt");
-class Vector2 {
+import { MathExt } from "./MathExt.js";
+export class Vector2 {
+    x;
+    y;
     negate() {
         this.x = -this.x;
         this.y = -this.y;
@@ -25,11 +24,17 @@ class Vector2 {
     equals(vec) {
         return Vector2.equals(this, vec);
     }
+    static _Zero = new Vector2(0, 0);
     static get Zero() { return this._Zero; }
+    static _One = new Vector2(1, 1);
     static get One() { return this._One; }
+    static _Up = new Vector2(0, -1);
     static get Up() { return this._Up; }
+    static _Left = new Vector2(-1, 0);
     static get Left() { return this._Left; }
+    static _Down = new Vector2(0, 1);
     static get Down() { return this._Down; }
+    static _Right = new Vector2(1, 0);
     static get Right() { return this._Right; }
     static add(a, b) { return new Vector2(a.x + b.x, a.y + b.y); }
     static sub(a, b) { return new Vector2(a.x - b.x, a.y - b.y); }
@@ -129,6 +134,7 @@ class Vector2 {
         return (Math.atan2(target.y - this.y, target.x - this.x) / (Math.PI * 2)) * 360;
     }
     ;
+    static eigthOfPiRadian = new Vector2(Math.sin(Math.PI / 8), Math.cos(Math.PI / 8));
     /**
      * Vector will be rotated 45 degree to the right.
      * @param a the Vector
@@ -171,8 +177,8 @@ class Vector2 {
     }
     ;
     clamp(clamtorMin, clamptorMax) {
-        this.x = MathExt_1.MathExt.clamp(this.x, clamtorMin.x, clamptorMax.x);
-        this.y = MathExt_1.MathExt.clamp(this.y, clamtorMin.y, clamptorMax.y);
+        this.x = MathExt.clamp(this.x, clamtorMin.x, clamptorMax.x);
+        this.y = MathExt.clamp(this.y, clamtorMin.y, clamptorMax.y);
         return this;
     }
     /**
@@ -239,12 +245,4 @@ class Vector2 {
         return this.x.toFixed(2) + ", " + this.y.toFixed(2);
     }
 }
-exports.Vector2 = Vector2;
-Vector2._Zero = new Vector2(0, 0);
-Vector2._One = new Vector2(1, 1);
-Vector2._Up = new Vector2(0, -1);
-Vector2._Left = new Vector2(-1, 0);
-Vector2._Down = new Vector2(0, 1);
-Vector2._Right = new Vector2(1, 0);
-Vector2.eigthOfPiRadian = new Vector2(Math.sin(Math.PI / 8), Math.cos(Math.PI / 8));
 //# sourceMappingURL=Vector2.js.map

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TypeCheck = void 0;
-class TypeCheck {
+export class TypeCheck {
     static isDrawable(obj) {
         return !!(obj && obj.Position !== undefined);
     }
@@ -9,5 +6,4 @@ class TypeCheck {
         return !!(obj && obj.Id !== undefined);
     }
 }
-exports.TypeCheck = TypeCheck;
 //# sourceMappingURL=Typecheck.js.map

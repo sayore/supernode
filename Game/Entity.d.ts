@@ -1,4 +1,4 @@
-import { ITypeable } from "../Base/ITypeable";
+import { ITypeable } from "../Base/ITypeable.js";
 export declare class Entity implements ITypeable {
     Type: string;
     Game: any;

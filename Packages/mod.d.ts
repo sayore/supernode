@@ -1,2 +1,2 @@
-export * from "./IPackageJSON";
-export * from "./PackageManager";
+export * from "./IPackageJSON.js";
+export * from "./PackageManager.js";

@@ -1,4 +1,4 @@
-import { MathExt } from "./MathExt";
+import { MathExt } from "./MathExt.js";
 
 export class Vector2 {
     negate(): Vector2 {

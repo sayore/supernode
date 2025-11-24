@@ -1,1 +1,1 @@
-export * from "./EventHelper";
+export * from "./EventHelper.js";

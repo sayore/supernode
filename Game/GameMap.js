@@ -1,7 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GameMap = void 0;
-class GameMap {
+export class GameMap {
+    width;
+    height;
+    tiles;
     constructor(width, height) {
         this.width = width;
         this.height = height;
@@ -37,5 +37,4 @@ class GameMap {
         throw new Error("Not implemented yet");
     }
 }
-exports.GameMap = GameMap;
 //# sourceMappingURL=GameMap.js.map

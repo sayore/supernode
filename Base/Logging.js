@@ -29,7 +29,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LogLevel = exports.LogTarget = exports.InteractiveLogging = exports.Logging = void 0;
 const fs = __importStar(require("fs-extra"));
 const chalk_1 = __importDefault(require("chalk"));
+/**
+ * A static class for handling logging throughout the application.
+ */
 class Logging {
+    /**
+     * Logs a message with a specified log level.
+     * @param msg The message to log. Can be a single value or an array of values.
+     * @param level The log level. Defaults to LogLevel.Unknown.
+     */
     static log(msg, level = LogLevel.Unknown) {
         var _a;
         var t = new Date();
@@ -86,6 +94,11 @@ class Logging {
             }
         }
     }
+    /**
+     * Sets the log target for a specific log level.
+     * @param ll The log level to configure.
+     * @param lt The target for the log level.
+     */
     static setLogTarget(ll, lt) {
         let lao = this.loggingActiveOn.findIndex(lao => lao.ll == ll);
         if (lao == -1) {
@@ -100,6 +113,9 @@ class Logging {
 exports.Logging = Logging;
 Logging.interactiveMode = false;
 Logging.loggingActiveOn = [];
+/**
+ * A class for handling interactive logging, such as progress bars or animations.
+ */
 class InteractiveLogging {
     constructor() {
         this.draw = [];
@@ -110,6 +126,9 @@ class InteractiveLogging {
     }
 }
 exports.InteractiveLogging = InteractiveLogging;
+/**
+ * Defines the possible targets for logging.
+ */
 var LogTarget;
 (function (LogTarget) {
     LogTarget["Console"] = "TTY";
@@ -117,6 +136,9 @@ var LogTarget;
     LogTarget["Null"] = "NULL";
     LogTarget["All"] = "All";
 })(LogTarget || (exports.LogTarget = LogTarget = {}));
+/**
+ * Defines the different levels of logging.
+ */
 var LogLevel;
 (function (LogLevel) {
     LogLevel["Unknown"] = "Unknown";
@@ -129,6 +151,12 @@ var LogLevel;
     LogLevel["GReport"] = "GReport";
     LogLevel["NReport"] = "NReport";
 })(LogLevel || (exports.LogLevel = LogLevel = {}));
+/**
+ * Logs a message to the console.
+ * @param msg The message to log.
+ * @param logstring The formatted log string.
+ * @returns The original message.
+ */
 function logToConsole(msg, logstring) {
     if (typeof (msg) == "string")
         console.log(logstring + " " + msg);
@@ -143,6 +171,12 @@ function logToConsole(msg, logstring) {
     }
     return msg;
 }
+/**
+ * Logs a message to a file.
+ * @param level The log level, used to determine the file name.
+ * @param logstring The formatted log string.
+ * @param msg The message to log.
+ */
 function logToFile(level, logstring, msg) {
     fs.ensureFileSync('./log/' + level + ".log");
     fs.appendFileSync('./log/' + level + ".log", logstring + " " + msg + "\n");

@@ -4,7 +4,7 @@
         "target": "es6",
         "moduleResolution": "NodeNext",
         "lib": [
-            "es2018",
+            "ES2023",
             "dom"
         ],
         "sourceMap": true,

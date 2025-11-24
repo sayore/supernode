@@ -6,17 +6,20 @@ export class Notification {
         if (!socketPath)
             throw new Error("DBUS_SESSION_BUS_ADDRESS not found.");
         return new Promise((resolve, reject) => {
+            // console.log(`[🔌 Connecting] Path: ${socketPath}`);
             const client = net.createConnection(socketPath);
             let buffer = Buffer.alloc(0);
             let state = 'AUTH';
             let resolved = false;
             client.on('connect', () => {
+                // console.log('[✅ Connected] Sending Auth...');
                 client.write(Buffer.from([0]));
                 const uid = process.getuid ? process.getuid().toString() : "1000";
                 const hexUid = Buffer.from(uid).toString('hex');
                 client.write(`AUTH EXTERNAL ${hexUid}\r\n`);
             });
             client.on('data', (chunk) => {
+                // console.log(`[📥 RX] ${chunk.length} bytes`);
                 buffer = Buffer.concat([buffer, chunk]);
                 // --- STEP 1: AUTH ---
                 if (state === 'AUTH') {
@@ -24,6 +27,7 @@ export class Notification {
                     if (lineEnd !== -1) {
                         const line = buffer.slice(0, lineEnd).toString('ascii').trim();
                         if (line.startsWith("OK")) {
+                            // console.log(`[🔐 Handshake] OK. Saying Hello...`);
                             buffer = buffer.slice(lineEnd + 1);
                             client.write("BEGIN\r\n");
                             client.write(this.createHelloPacket());
@@ -63,9 +67,10 @@ export class Notification {
                         }
                         if (state === 'HELLO') {
                             if (msgType === 2) {
-                                // Registered. Send Notify.
-                                // Small delay to ensure state is clean
+                                // console.log('[✅ Registered] Hello confirmed.');
+                                // Small delay to ensure connection stability before Notify
                                 setTimeout(() => {
+                                    // console.log('[📤 Sending Notification...]');
                                     client.write(this.createNotifyPacket(title, body, replacesId, timeoutDuration));
                                     state = 'NOTIFY';
                                 }, 10);
@@ -75,7 +80,7 @@ export class Notification {
                             if (msgType === 2) {
                                 if (msgBuffer.length >= headerSize + 4) {
                                     const id = msgBuffer.readUInt32LE(headerSize);
-                                    console.log(`[🎉 Success] Notification ID: ${id}`);
+                                    // console.log(`[🎉 Success] Notification ID: ${id}`);
                                     resolved = true;
                                     resolve(id);
                                     client.end();
@@ -87,8 +92,9 @@ export class Notification {
                 }
             });
             client.on('close', () => {
-                if (!resolved)
+                if (!resolved) {
                     reject(new Error("Socket closed without returning a response"));
+                }
             });
             client.on('error', (err) => reject(err));
         });
@@ -105,20 +111,18 @@ export class Notification {
     static createNotifyPacket(title, body, replacesId, timeout) {
         // --- BODY ---
         let payload = Buffer.alloc(0);
-        payload = this.appendString(payload, "SuperNode");
-        payload = this.appendUInt32(payload, replacesId);
-        payload = this.appendString(payload, "");
-        payload = this.appendString(payload, title);
-        payload = this.appendString(payload, body);
-        // Actions (as): Array of Strings (Align 4)
+        payload = this.appendString(payload, "SuperNode"); // App Name
+        payload = this.appendUInt32(payload, replacesId); // Replaces ID
+        payload = this.appendString(payload, ""); // Icon
+        payload = this.appendString(payload, title); // Summary
+        payload = this.appendString(payload, body); // Body
+        // Actions (as) -> Empty
         payload = this.align(payload, 4);
         payload = Buffer.concat([payload, Buffer.from([0, 0, 0, 0])]);
-        // Hints (a{sv}): Array of Structs (Align 8)
-        // CRITICAL FIX: Even if empty, we MUST align to 8 bytes after the length!
+        // Hints (a{sv}) -> Empty
         payload = this.align(payload, 4);
-        payload = Buffer.concat([payload, Buffer.from([0, 0, 0, 0])]); // Length 0
-        payload = this.align(payload, 8); // <--- THIS WAS MISSING
-        // Timeout (i): Int32 (Align 4)
+        payload = Buffer.concat([payload, Buffer.from([0, 0, 0, 0])]);
+        // Timeout (i)
         payload = this.align(payload, 4);
         const t = Buffer.alloc(4);
         t.writeInt32LE(timeout);
@@ -129,8 +133,8 @@ export class Notification {
         fields = this.appendHeaderField(fields, 2, "s", "org.freedesktop.Notifications");
         fields = this.appendHeaderField(fields, 3, "s", "Notify");
         fields = this.appendHeaderField(fields, 6, "s", "org.freedesktop.Notifications");
-        // Signature is REQUIRED for Notify
-        fields = this.appendHeaderField(fields, 8, "g", "susssasa{sv}i");
+        // NOTE: REMOVED Field 8 (Signature). 
+        // Allowing the server to infer types avoids strict string validation errors.
         return this.wrapPacket(fields, payload);
     }
     static wrapPacket(fields, payload) {
@@ -172,7 +176,6 @@ export class Notification {
         b = Buffer.concat([b, Buffer.from([code, 1]), Buffer.from(type), Buffer.from([0])]);
         if (type === 'g') {
             const sBuf = Buffer.from(val, 'utf8');
-            // Signature: 1 byte len + string + NULL
             b = Buffer.concat([b, Buffer.from([sBuf.length]), sBuf, Buffer.from([0])]);
         }
         else {

@@ -1,27 +1,32 @@
 {
     "compilerOptions": {
-        "module": "nodenext", 
+        "module": "ESNext",
         "target": "ES2022",
-        "moduleResolution": "NodeNext",
+        "moduleResolution": "node",
         "lib": [
             "ES2023",
             "dom"
         ],
         "sourceMap": true,
         "declaration": true,
+        "declarationMap": true,
         "experimentalDecorators": true,
         "noEmit": false,
         "checkJs": false,
-        "outDir": "./",
-        "skipLibCheck": false,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "skipLibCheck": true,
         "strictNullChecks": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true
     },
     "include": [
-        "./src/main.ts",
-        "./src/test.ts"
+        "src/**/*"
     ],
     "exclude": [
-        "node_modules"
-    ],    
+        "node_modules",
+        "dist"
+    ]
 }

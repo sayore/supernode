@@ -8,6 +8,6 @@ class FlatAdapter {
     }
 }
 
-class TableAdapter {
+class TableAdapter {c
 
 }

@@ -1,76 +1,129 @@
+import { describe, expect, test, beforeEach, afterEach } from '@jest/globals';
 import { Logging, LogLevel, LogTarget } from './Logging';
 import * as fs from 'fs-extra';
+import * as chalk from 'chalk';
 
-// Mock fs-extra
-jest.mock('fs-extra');
+// Mock für chalk
+jest.mock('chalk', () => ({
+  blue: jest.fn((str) => str),
+  green: jest.fn((str) => str),
+  yellow: jest.fn((str) => str),
+  red: jest.fn((str) => str),
+  magenta: jest.fn((str) => str),
+  cyan: jest.fn((str) => str),
+  gray: jest.fn((str) => str),
+}));
+
+// Mock für fs-extra
+jest.mock('fs-extra', () => ({
+  appendFileSync: jest.fn(),
+  existsSync: jest.fn(),
+  mkdirSync: jest.fn(),
+}));
 
 describe('Logging', () => {
-  let consoleLogSpy: jest.SpyInstance;
+  let consoleSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    // Spy on console.log to check what's being logged
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    // Clear mock history before each test
-    (fs.ensureFileSync as jest.Mock).mockClear();
-    (fs.appendFileSync as jest.Mock).mockClear();
+    // Leeren Sie die Protokollierungseinstellungen vor jedem Test
+    Logging.loggingActiveOn = [];
+    consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    // Restore original console.log
-    consoleLogSpy.mockRestore();
+    consoleSpy.mockRestore();
   });
 
-  describe('log', () => {
-    it('should log to console by default', () => {
-      Logging.log('test message', LogLevel.Normal);
-      expect(consoleLogSpy).toHaveBeenCalled();
-    });
+  test('should log to console with different log levels', () => {
+    // Aktivieren Sie die Protokollierung für alle Ebenen auf die Konsole
+    Logging.setLogTarget(LogLevel.Trace, LogTarget.Console);
+    Logging.setLogTarget(LogLevel.Debug, LogTarget.Console);
+    Logging.setLogTarget(LogLevel.Info, LogTarget.Console);
+    Logging.setLogTarget(LogLevel.Warn, LogTarget.Console);
+    Logging.setLogTarget(LogLevel.Error, LogTarget.Console);
+    Logging.setLogTarget(LogLevel.Fatal, LogTarget.Console);
 
-    it('should log to a file when LogTarget is Textfile', () => {
-      Logging.setLogTarget(LogLevel.Normal, LogTarget.Textfile);
-      Logging.log('test message', LogLevel.Normal);
-      expect(fs.ensureFileSync).toHaveBeenCalledWith('./log/Normal.log');
-      expect(fs.appendFileSync).toHaveBeenCalled();
-    });
+    // Protokollieren Sie Nachrichten verschiedener Ebenen
+    Logging.log(LogLevel.Trace, 'Trace message');
+    Logging.log(LogLevel.Debug, 'Debug message');
+    Logging.log(LogLevel.Info, 'Info message');
+    Logging.log(LogLevel.Warn, 'Warn message');
+    Logging.log(LogLevel.Error, 'Error message');
+    Logging.log(LogLevel.Fatal, 'Fatal message');
 
-    it('should log to both console and file when LogTarget is All', () => {
-      Logging.setLogTarget(LogLevel.Normal, LogTarget.All);
-      Logging.log('test message', LogLevel.Normal);
-      expect(consoleLogSpy).toHaveBeenCalled();
-      expect(fs.ensureFileSync).toHaveBeenCalledWith('./log/Normal.log');
-      expect(fs.appendFileSync).toHaveBeenCalled();
-    });
-
-    it('should not log to console when LogTarget is Textfile', () => {
-        Logging.setLogTarget(LogLevel.Normal, LogTarget.Textfile);
-        Logging.log('test message', LogLevel.Normal);
-        expect(consoleLogSpy).not.toHaveBeenCalled();
-    });
-
-    it('should not log to file when LogTarget is Console', () => {
-        Logging.setLogTarget(LogLevel.Normal, LogTarget.Console);
-        Logging.log('test message', LogLevel.Normal);
-        expect(fs.ensureFileSync).not.toHaveBeenCalled();
-        expect(fs.appendFileSync).not.toHaveBeenCalled();
-    });
-
+    // Überprüfen Sie, ob console.log für jede Nachricht aufgerufen wurde
+    expect(consoleSpy).toHaveBeenCalledTimes(6);
   });
 
-  describe('setLogTarget', () => {
-    it('should set the log target for a given log level', () => {
-      Logging.setLogTarget(LogLevel.Testing, LogTarget.Textfile);
-      Logging.log('test message', LogLevel.Testing);
-      expect(fs.ensureFileSync).toHaveBeenCalledWith('./log/Testing.log');
-    });
+  test('should log to file with different log levels', () => {
+    // Aktivieren Sie die Protokollierung für alle Ebenen in eine Datei
+    Logging.setLogTarget(LogLevel.Trace, LogTarget.File);
+    Logging.setLogTarget(LogLevel.Debug, LogTarget.File);
+    Logging.setLogTarget(LogLevel.Info, LogTarget.File);
+    Logging.setLogTarget(LogLevel.Warn, LogTarget.File);
+    Logging.setLogTarget(LogLevel.Error, LogTarget.File);
+    Logging.setLogTarget(LogLevel.Fatal, LogTarget.File);
 
-    it('should update the log target if it already exists', () => {
-        Logging.setLogTarget(LogLevel.Info, LogTarget.Textfile);
-        Logging.log('test message', LogLevel.Info);
-        expect(fs.ensureFileSync).toHaveBeenCalledWith('./log/Info.log');
+    // Protokollieren Sie Nachrichten verschiedener Ebenen
+    Logging.log(LogLevel.Trace, 'Trace message');
+    Logging.log(LogLevel.Debug, 'Debug message');
+    Logging.log(LogLevel.Info, 'Info message');
+    Logging.log(LogLevel.Warn, 'Warn message');
+    Logging.log(LogLevel.Error, 'Error message');
+    Logging.log(LogLevel.Fatal, 'Fatal message');
 
-        Logging.setLogTarget(LogLevel.Info, LogTarget.Console);
-        Logging.log('another test message', LogLevel.Info);
-        expect(consoleLogSpy).toHaveBeenCalled();
-      });
+    // Überprüfen Sie, ob fs.appendFileSync für jede Nachricht aufgerufen wurde
+    expect(fs.appendFileSync).toHaveBeenCalledTimes(6);
+  });
+
+  test('should handle mixed log targets', () => {
+    // Aktivieren Sie die Protokollierung für einige Ebenen auf die Konsole und andere in eine Datei
+    Logging.setLogTarget(LogLevel.Info, LogTarget.Console);
+    Logging.setLogTarget(LogLevel.Error, LogTarget.File);
+
+    // Protokollieren Sie Nachrichten
+    Logging.log(LogLevel.Info, 'Info message');
+    Logging.log(LogLevel.Error, 'Error message');
+
+    // Überprüfen Sie, ob die richtigen Funktionen aufgerufen wurden
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
+    expect(fs.appendFileSync).toHaveBeenCalledTimes(1);
+  });
+
+  test('should not log if log level is not activated', () => {
+    // Stellen Sie sicher, dass keine Protokollierungsziele aktiv sind
+    Logging.loggingActiveOn = [];
+
+    // Versuchen Sie, eine Nachricht zu protokollieren
+    Logging.log(LogLevel.Info, 'This should not be logged');
+
+    // Überprüfen Sie, ob weder console.log noch fs.appendFileSync aufgerufen wurde
+    expect(consoleSpy).toHaveBeenCalledTimes(0);
+    expect(fs.appendFileSync).toHaveBeenCalledTimes(0);
+  });
+
+  test('should handle interactive mode', () => {
+    // Aktivieren Sie den interaktiven Modus
+    Logging.interactiveMode = true;
+
+    // Protokollieren Sie eine Nachricht
+    Logging.log(LogLevel.Info, 'Interactive message');
+
+    // Überprüfen Sie, ob console.log aufgerufen wurde
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
+  });
+
+  test('should properly format log messages', () => {
+    // Aktivieren Sie die Protokollierung auf die Konsole
+    Logging.setLogTarget(LogLevel.Info, LogTarget.Console);
+
+    // Protokollieren Sie eine Nachricht
+    Logging.log(LogLevel.Info, 'Formatted message');
+
+    // Überprüfen Sie, ob console.log mit der korrekten Formatierung aufgerufen wurde
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining('[INFO]'),
+      expect.stringContaining('Formatted message')
+    );
   });
 });

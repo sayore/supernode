@@ -100,3 +100,4 @@ typings/
 
 # typescript
 *.tsbuildinfo
+dist

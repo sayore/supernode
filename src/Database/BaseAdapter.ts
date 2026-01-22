@@ -1,13 +1,13 @@
 class FlatAdapter {
-    set(val: any, nameOrId:string, table:string=undefined) {
+    set(val: any, nameOrId: string, table?: string) {
 
     }
 
-    get(name:string,table:string=undefined) {
+    get(name: string, table?: string) {
 
     }
 }
 
 class TableAdapter {
-    
+
 }

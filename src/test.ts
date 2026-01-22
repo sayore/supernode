@@ -1,7 +1,7 @@
-import { Logging, LogLevel, LogTarget } from "./Base/Logging.js";
-import { Trace } from "./Debug/Trace.js";
-import { Item } from "./Game/Item.js";
-import { System } from "./main.js";
+import { Logging, LogLevel, LogTarget } from "./Base";
+import { Trace } from "./Debug";
+import { Item } from "./Game";
+import { System } from "./main";
 
 Logging.setLogTarget(LogLevel.Testing , LogTarget.All);
 Logging.log("Test",LogLevel.Testing);
@@ -20,5 +20,5 @@ async function test() {
   await System.Notification.send("Test","Test")
   await Logging.log("Done")
 }
-  
+
 await test();

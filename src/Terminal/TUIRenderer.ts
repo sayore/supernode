@@ -1,133 +1,139 @@
-// TUIRenderer.ts
-import { Terminal } from './Terminal.js'; // Your class
+import { Terminal } from './Terminal.js';
 import { TUIElement } from './TUIElement.js';
-import chalk from 'chalk'; // Optional: for coloring
+import chalk from 'chalk';
 
 export class TUIRenderer {
     constructor(private term: Terminal) {}
 
     public render(root: TUIElement) {
         // 1. Calculate Geometry
-        // We assume full screen for the root, but you could limit it
         const { columns, rows } = process.stdout;
         root.computeLayout(columns, rows);
 
         // 2. Draw Recursive
         this.drawNode(root, 0, 0);
 
-        // 3. Flush the buffer (Your existing method)
+        // 3. Flush
         this.term.flush();
     }
 
     private drawNode(node: TUIElement, parentX: number, parentY: number) {
         const layout = node.yogaNode.getComputedLayout();
         
-        // Calculate Absolute Position
+        // Absolute Position
         const absX = parentX + layout.left;
         const absY = parentY + layout.top;
         const width = layout.width;
         const height = layout.height;
 
-        // --- DRAW BACKGROUND ---
+        // --- 1. DRAW BACKGROUND BOX ---
         if (node.style.bg) {
-            // Very basic fill: loop through height/width
-            // You can optimize this with repeat()
             const bgCode = this.getBgColorCode(node.style.bg); 
+            // Only necessary if the box is bigger than the text content
             for (let y = 0; y < height; y++) {
-                // writeAt(row, col, text) -> Your API uses 1-based indexing typically? 
-                // Let's assume your writeAt is 1-based.
                 const row = Math.floor(absY + y + 1);
                 const col = Math.floor(absX + 1);
                 const fill = ' '.repeat(Math.floor(width));
-                
                 this.term.writeAt(row, col, fill, bgCode);
             }
         }
 
-        // --- DRAW TEXT & CURSOR ---
-        // We handle both 'text' labels and 'input' fields here
+        // --- 2. DRAW TEXT (Unified Logic) ---
+        // This now handles Labels AND Inputs using the same visual logic
         if ((node.tagName === 'text' || node.tagName === 'input') && node.renderedText) {
             const content = node.renderedText;
             const startX = Math.floor(absX + 1);
             const startY = Math.floor(absY + 1);
             
-            const fg = this.getFgColorCode(node.style.color || 'white');
-            const bg = node.style.bg ? this.getBgColorCode(node.style.bg) : '';
+            // Base Colors
+            const baseFg = this.getFgColorCode(node.style.color || 'white');
+            const baseBg = node.style.bg ? this.getBgColorCode(node.style.bg) : '';
 
-            // Split content into lines
+            // Get Selection Range (returns [start, end] or null)
+            // We assume TUIElement has this method now.
+            const selection = node.getSelectionRange();
+
             const lines = content.split('\n');
+            let charGlobalIndex = 0; // Track index across lines
 
-            // Loop through each line (Y-axis)
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
                 const currentY = startY + i;
 
-                // Stop drawing if we go outside the element's height
+                // Clip to element height
                 if (i >= height) break;
 
-                // 1. Text (Label) Mode
-                if (!node.isFocused || node.tagName !== 'input') {
-                     // Ensure we don't overflow width
-                     const safeText = line.substring(0, Math.floor(width));
-                     this.term.writeAt(currentY, startX, safeText, `${fg}${bg}`);
-                } 
-                // 2. Input Mode (Cursor Logic)
-                else {
-                    // (Your existing cursor loop logic goes here)
-                    // Note: Inputs are usually single-line, but if you support multi-line inputs later,
-                    // you would need to calculate which line the cursor is on.
-                    // For now, you can just render the first line for inputs:
-                    if (i === 0) {
-                        for (let j = 0; j < line.length && j < width; j++) {
-                            const char = line[j] || ' ';
-                            const isCursor = (j === node.cursorIndex);
-                            const style = isCursor ? `${fg}${bg}\x1b[7m` : `${fg}${bg}\x1b[27m`;
-                            this.term.writeAt(currentY, startX + j, char, style);
-                        }
+                // Iterate characters in this line
+                for (let j = 0; j < Math.floor(width); j++) {
+                    // Handle short lines (pad with space if needed, or just stop)
+                    if (j >= line.length && node.tagName !== 'input') break;
+
+                    const char = line[j] || ' '; // ' ' handles input placeholders/padding
+                    const charCurrentIndex = charGlobalIndex + j;
+
+                    // --- VISUAL PRIORITY SYSTEM ---
+                    
+                    let style = `${baseFg}${baseBg}`; // Default
+
+                    // A. Check Selection
+                    const isSelected = selection && 
+                                       charCurrentIndex >= selection[0] && 
+                                       charCurrentIndex < selection[1];
+
+                    // B. Check Cursor (Only if focused)
+                    const isCursor = node.isFocused && 
+                                     node.tagName === 'input' && 
+                                     charCurrentIndex === node.cursorPosition;
+
+                    if (isCursor) {
+                        // Cursor Style: Invert + maybe blinking (handled by terminal usually, but manual here)
+                        // \x1b[7m = Reverse Video (Swap FG/BG)
+                        style = `${baseFg}${baseBg}\x1b[7m`; 
+                    } else if (isSelected) {
+                        // Selection Style: Distinct background (e.g., Blue or Inverse)
+                        // Browser style: White text on Blue background
+                        const selBg = '\x1b[48;5;27m'; // ANSI Blue
+                        const selFg = '\x1b[38;5;255m'; // ANSI White
+                        style = `${selFg}${selBg}`;
                     }
+
+                    // Reset style (\x1b[0m) isn't used per char to optimize, 
+                    // we rely on the next write or end of loop. 
+                    // But for safety in complex TUI, we often reset properties:
+                    
+                    this.term.writeAt(currentY, startX + j, char, `\x1b[0m${style}`);
                 }
+                
+                // Account for newline char in global index
+                charGlobalIndex += line.length + 1; 
             }
         }
 
-        // --- RECURSE ---
+        // --- 3. RECURSE ---
         for (const child of node.children) {
             this.drawNode(child, absX, absY);
         }
     }
 
-    // Helper: Convert Hex to ANSI TrueColor string directly
-    // Format: \x1b[38;2;R;G;Bm (Foreground) or \x1b[48;2;R;G;Bm (Background)
-    // Inside TUIRenderer.ts
+    // --- COLOR HELPERS (Same as before) ---
 
     private hexToAnsi(hex: string, isBg: boolean): string {
         let clean = hex.replace('#', '');
-
-        // Fix Short Hex (e.g. "F0A" -> "FF00AA")
-        if (clean.length === 3) {
-            clean = clean.split('').map(c => c + c).join('');
-        }
-
+        if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
         const r = parseInt(clean.substring(0, 2), 16);
         const g = parseInt(clean.substring(2, 4), 16);
         const b = parseInt(clean.substring(4, 6), 16);
-        
         const type = isBg ? 48 : 38;
         return `\x1b[${type};2;${r};${g};${b}m`;
     }
 
     private getBgColorCode(color: string): string {
-        if (color.startsWith('#')) {
-            return this.hexToAnsi(color, true);
-        }
-        // Fallback for named colors (like 'blue') using a safe 'any' cast
-        // or you can implement a simple name mapper if you want zero deps
+        if (color.startsWith('#')) return this.hexToAnsi(color, true);
         return (chalk as any).bgKeyword(color)._styler?.open || '';
     }
 
     private getFgColorCode(color: string): string {
-        if (color.startsWith('#')) {
-            return this.hexToAnsi(color, false);
-        }
+        if (color.startsWith('#')) return this.hexToAnsi(color, false);
         return (chalk as any).keyword(color)._styler?.open || '';
     }
 }

@@ -1,7 +1,7 @@
 import { Terminal } from './Terminal/Terminal.js';
 import { TUIRenderer } from './Terminal/TUIRenderer.js';
 import { TemplateParser } from './Terminal/TemplateParser.js';
-import { $, InteractionManager } from './Terminal/InteractionManager.js';
+import { InteractionManager } from './Terminal/InteractionManager.js';
 import { TUIElement } from './Terminal/TUIElement.js';
 import { DebugConsole } from './Terminal/DebugConsole.js';
 
@@ -49,7 +49,7 @@ box(dir="column" w="100%" h="100%" bg="#111")
         box(mt=1)
           text(color="#555") * Click fields to edit. Press Tab to cycle.
       // FORM CONTAINER
-      box(flex=1 bg="#111" padding=2)
+      box#addHere(flex=1 bg="#111" padding=2)
         text(color="yellow" h=2 mb=1) EDIT USER PROFILE
         box(dir="row" h=2 ai="center")
           text(w=15 color="white") First Name:
@@ -79,25 +79,34 @@ const debug = new DebugConsole(root, app);
 console.log("System started. Press F12 for logs.");
 
 // 1. Direct Selection
-$('#fname')?.focus();
+app.$('#fname')?.focus();
 
 // 2. Event Binding
-const btn = $('input#b');
+const btn = app.$('#b');
 btn?.onClick(() => {
     console.log("Button clicked! Adding Fish...");
     const fish = new TUIElement('input');
-    root.add(fish);
-
-    $('#fname').textContent=($('#fname')?.textContent ?? "FISH")+" Fish"
+    fish.setStyle({bg:"blue",color:"white"})
+    fish.textContent="Fisch1"
+    fish.props.text="Fisch2"
+    fish.inputValue="fishy 3"
     
+    let addHere = app.$('#addHere')
+    if(addHere){
+        addHere.add(fish);
+        //addHere.textContent=(app.$('#fname')?.textContent ?? "FISH")+" Fish"
+    }
+    else console.log("name nicht gefunden")
     // CRITICAL: Tell Manager to scan for the new element
     app.refreshTabOrder();
     
     // Now you can focus it
-    fish.focus();
+    //fish.focus();
 });
 
-console.log(root.printTree(0))
+//console.log("PrtTree")
+//console.log(root.printTree(0))
+//console.log(btn)
 
 // 3. Render Loop
 term.onKey(k => {
@@ -116,6 +125,10 @@ term.onKey(k => {
 
 term.onMouse((m) => {
     //console.log("mouse "+JSON.stringify(m));
+    if(m.button == "left") { 
+        console.log(app.$('#b')?.toString(),m);
+    }
+
     renderer.render(root)
 });
 

@@ -38,12 +38,7 @@ export class TemplateParser {
 
         for (const line of lines) {
             const { indent, content } = this.getIndent(line);
-            const parsed = this.parseLine(content);
-            
-            // Create the node
-            const node = new TUIElement(parsed.tagName, parsed.style);
-            if (parsed.id) node.id = parsed.id;
-            if (parsed.text) node.textContent = parsed.text;
+            const node = this.parseLine(content);
             
             // --- TREE BUILDING LOGIC ---
             
@@ -87,54 +82,94 @@ export class TemplateParser {
     /**
      * Parses: "box#main.class(w='100%') Text Content"
      */
-    private parseLine(lineStr: string) {
-        // Regex Breakdown:
-        // ^([\w-]+)       -> Tag name (start of line)
-        // ([#.\w-]*)      -> Optional ID/Classes string (e.g. #id.class.class)
-        // (?:\(([^)]+)\))? -> Optional Attributes inside parens (captured group 3)
-        // (?:\s+(.*))?    -> Optional Text content after space (captured group 4)
+    // Inside TemplateParser -> parseLine method
+
+    private parseLine(line: string): TUIElement {
+        // 1. Separate Tag/ID/Classes from Attributes
+        const attrStart = line.indexOf('(');
+        const hasAttrs = attrStart > -1;
         
-        const regex = /^([\w-]+)([#.\w-]*)(?:\(([^)]+)\))?(?:\s+(.*))?$/;
-        const match = lineStr.match(regex);
+        let rawTag = '';
+        let attrString = '';
+        let textPart = '';
 
-        if (!match) {
-            // Fallback for plain text or errors
-            return { tagName: 'text', style: {}, text: lineStr };
-        }
-
-        const [_, tagName, idClassStr, attrStr, textContent] = match;
-        
-        const style: TUIStyle = {};
-
-        const idMatch = idClassStr ? idClassStr.match(/#([\w-]+)/) : null;
-        const parsedId = idMatch ? idMatch[1] : '';
-
-        // 1. Parse Attributes (w="100%" color="red")
-        if (attrStr) {
-            // Match key="value" or key='value' or key=value
-            const attrRegex = /([\w-]+)=["']?([^"'\s]+)["']?/g;
-            let attrMatch;
-            while ((attrMatch = attrRegex.exec(attrStr)) !== null) {
-                const key = attrMatch[1];
-                const val = attrMatch[2];
-                this.mapAttributeToStyle(key, val, style);
+        if (hasAttrs) {
+            // Case A: attributes exist -> "div(class='a') Hello World"
+            rawTag = line.substring(0, attrStart).trim();
+            const attrEnd = line.lastIndexOf(')');
+            
+            // Extract attributes between ( )
+            attrString = line.substring(attrStart + 1, attrEnd);
+            
+            // Extract text AFTER the closing )
+            if (attrEnd < line.length - 1) {
+                textPart = line.substring(attrEnd + 1).trim();
+            }
+        } else {
+            // Case B: no attributes -> "div Hello World" or just "div"
+            // We split by the first space to separate tag from text
+            const firstSpace = line.indexOf(' ');
+            if (firstSpace > -1) {
+                rawTag = line.substring(0, firstSpace).trim();
+                textPart = line.substring(firstSpace + 1).trim();
+            } else {
+                rawTag = line.trim();
             }
         }
 
-        // 2. Parse Text
-        let finalTagName = tagName;
-        let finalText = textContent || '';
-        
-        // Convenience: If tag is 'text', content is implicit?
-        // Actually pug treats space after tag as content.
+        // --- Tag, ID, Class Parsing (Same as before) ---
+        const tagMatch = rawTag.match(/^[^.#]+/);
+        const tagName = tagMatch ? tagMatch[0] : 'box';
 
-        return { tagName: finalTagName, id: parsedId, style, text: finalText };
+        const idMatch = rawTag.match(/#([^.#]+)/);
+        const elementId = idMatch ? idMatch[1] : '';
+
+        const classMatches = rawTag.match(/\.[^.#]+/g);
+        const classes = classMatches ? classMatches.map(c => c.substring(1)) : [];
+
+        // 2. Parse Attributes
+        const style: any = {};
+        const props: any = {};
+        
+        if (attrString) {
+            this.parseAttributes(attrString, style, props);
+        }
+
+        // 3. Create Element & Assign Data
+        const el = new TUIElement(tagName, style);
+        el.props = props; // Attach the props!
+        
+        if (elementId) el.id = elementId;
+        if (classes.length > 0) el.classList = classes;
+
+        // 4. ✅ CRITICAL FIX: Assign the text content
+        if (textPart) {
+            // We assign to BOTH places to be safe. 
+            // The renderer likely uses .textContent, but your logic might use .props.text
+            el.textContent = textPart; 
+            el.props.text = textPart || "";
+        }
+        
+        return el;
+    }
+
+    // Helper to keep parseLine clean
+    private parseAttributes(attrString: string, style: any, props: any) {
+         // Use a regex to match key="value" or key=123
+         const regex = /([a-zA-Z0-9-_]+)=(?:"([^"]*)"|([^ ]+))/g;
+         let match;
+         
+         while ((match = regex.exec(attrString)) !== null) {
+             const key = match[1];
+             const val = match[2] || match[3];
+             this.mapAttributeToStyle(key, val, style, props);
+         }
     }
 
     /**
      * Maps shorthand attributes (pug style) to your internal TUIStyle
      */
-    private mapAttributeToStyle(key: string, val: string, style: TUIStyle) {
+    private mapAttributeToStyle(key: string, val: string, style: TUIStyle, props: object) {
         // Numeric conversion helper
         const parseNum = (v: string) => v.endsWith('%') ? v : parseInt(v);
 
@@ -196,7 +231,11 @@ export class TemplateParser {
 
             // --- GAP ---
             case 'gap': style.gap = parseInt(val); break;
-            // Add more shorthands here!
+            // ✅ NEW: Default case for generic props
+            default:
+                // If it's not a style, it's a prop! (e.g. text="Hello", src="...", value="123")
+                props[key] = val; 
+                break;
         }
     }
 }

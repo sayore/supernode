@@ -35,15 +35,15 @@ export class TUIElement {
     
     // Content
     public tagName: string; // 'box' | 'text'
-    private _textContent: string = '';
+    protected _value: string = "";
     public id: string = ''; // Add this
+    public classList: string[] = []; // Add this
+    public props: any = {}; // Add this
     // Interaction Flags
     public focusable: boolean = false; // Can this receive focus? (tabIndex)
     public isFocused: boolean = false; // Is it currently active?
-    
-    // Input Specifics
-    public inputValue: string = '';    // The text in the field
-    public cursorIndex: number = 0;    // Where is the cursor? (0 to length)
+
+    public cursorPosition: number = 0;
     
     // Styles
     public style: TUIStyle = {};
@@ -52,6 +52,10 @@ export class TUIElement {
         this.tagName = tagName;
         this.yogaNode = Yoga.Node.create();
         this.setStyle(style);
+
+        if (this.props?.text) {
+            this.value = this.props.text; // Use the setter!
+        }
 
         if (tagName === 'text' || tagName === 'input') {
             this.yogaNode.setMeasureFunc((width, widthMode, height, heightMode) => {
@@ -78,6 +82,31 @@ export class TUIElement {
         }
     }
 
+    get value(): string {
+        return this._value;
+    }
+
+    set value(v: string) {
+        if (this._value !== v) {
+            this._value = v;
+            
+            // 1. Tell Yoga the content size changed!
+            // This forces it to recalculate width/height on the next render.
+            this.yogaNode.markDirty(); 
+
+            // 2. Cursor logic (if you want to keep it safe, though Manager handles it mostly)
+            // this.cursorPosition = v.length; // (Keep this commented out as discussed)
+        }
+    }
+
+    // Making textContent just point to value
+    get textContent(): string { return this.value; }
+    set textContent(v: string) { this.value = v; }
+
+    // Making inputValue just point to value
+    get inputValue(): string { return this.value; }
+    set inputValue(v: string) { this.value = v; }
+
     public remove(child: TUIElement) {
         const index = this.children.indexOf(child);
         if (index > -1) {
@@ -93,7 +122,7 @@ export class TUIElement {
     }
 
     // The Unified Selector Method
-    public query(selector: string): TUIElement {
+    public query(selector: string): TUIElement | null {
         // 1. Handle ID Selectors ("#myId")
         if (selector.startsWith('#')) {
             const cleanId = selector.substring(1);
@@ -113,21 +142,21 @@ export class TUIElement {
                 if (found) return found;
             }
         }
-        return new TUIDummyElement();;
+        return null;
     }
 
     // Alias for jQuery lovers
-    public $(selector: string): TUIElement {
-        return this.safe(selector);
+    public $(selector: string): TUIElement | null {
+        return this.$(selector);
     }
 
-    public safe(selector: string) {
-        const el = this.$(selector);
-        if (!el) {
-            return new TUIDummyElement();
-        }
-        return el;
-    }
+    //public safe(selector: string) {
+    //    const el = this.$(selector);
+    //    if (!el) {
+    //        return new TUIDummyElement();
+    //    }
+    //    return el;
+    //}
 
     // Add this helper method to find nodes
     public getElementById(id: string): TUIElement | null {
@@ -235,15 +264,6 @@ export class TUIElement {
         this.children.push(child);
         this.yogaNode.insertChild(child.yogaNode, this.children.length - 1);
     }
-    get textContent(): string {
-        return this._textContent;
-    }
-
-    set textContent(val: string) {
-        this._textContent = val;
-        // Tell Yoga this node needs to be re-measured
-        this.yogaNode.markDirty(); 
-    }
 
     public focus() {
         // We emit a special event that the Manager will listen for
@@ -257,6 +277,42 @@ export class TUIElement {
         process.stdout.write(`${indent}${this.tagName}${info}\n`);
         
         this.children.forEach(c => c.printTree(depth + 1));
+
+        return "printTree is not a console logable command"
+    }
+
+    /**
+     * Updates the cursor position based on a click relative to the element.
+     * @param localX The X position of the click relative to the element's left edge.
+     * (e.g., if Element starts at 10 and Mouse is at 12, localX is 2)
+     */
+    public onLocalClick(localX: number) {
+        if (this.tagName === 'input') {
+            // 1. Account for padding (if your style has it)
+            // (Yoga stores padding in the layout, but we can check style for simplicity)
+            const padding = this.style.padding || 0;
+            
+            // 2. Calculate raw character index
+            const charIndex = Math.round(localX - padding);
+
+            // 3. Clamp: Don't let cursor go before 0 or after text length
+            this.cursorPosition = Math.max(0, Math.min(charIndex, this.value.length));
+            
+            this.isFocused = true;
+        }
+    }
+
+    // Inside TUIElement class
+    public selectionAnchor: number = -1; // -1 means "No text selected"
+
+    // Helper to get the clean range (Low to High) for the renderer
+    public getSelectionRange(): [number, number] | null {
+        if (this.selectionAnchor === -1 || this.selectionAnchor === this.cursorPosition) {
+            return null;
+        }
+        const start = Math.min(this.selectionAnchor, this.cursorPosition);
+        const end = Math.max(this.selectionAnchor, this.cursorPosition);
+        return [start, end];
     }
     
     // Event Registry
@@ -283,11 +339,5 @@ export class TUIElement {
     // Crucial: Calculate layout starting from this node
     computeLayout(screenWidth: number, screenHeight: number) {
         this.yogaNode.calculateLayout(screenWidth, screenHeight, Yoga.DIRECTION_LTR);
-    }
-}
-
-export class TUIDummyElement extends TUIElement {
-    toString() {
-        return "[Dummy Element]";
     }
 }

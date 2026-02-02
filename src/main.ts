@@ -10,5 +10,6 @@ export * as Time from './Time/index.js'
 export * as System from './System/index.js'
 export * as Debug from './Debug/index.js'
 export * as Utilities from './Utilities/index.js'
+export * as Terminal from './Terminal/index.js'
 
 //export * as Server from './Server/index.js' 

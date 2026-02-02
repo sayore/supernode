@@ -100,7 +100,8 @@
     "level": "^8.0.1",
     "level-ts": "^2.1.0",
     "lodash": "^4.17.21",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "yoga-layout-prebuilt": "^1.10.0"
   },
   "devDependencies": {
     "@types/chalk": "^0.4.31",

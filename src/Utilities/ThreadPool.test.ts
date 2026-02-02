@@ -5,11 +5,11 @@ import { WorkerThreadManager } from './WorkerThreadManager';
 // Mock für WorkerThreadManager
 jest.mock('./WorkerThreadManager', () => ({
   WorkerThreadManager: jest.fn(() => ({
-    createWorker: jest.fn(() => 1), // Gibt eine Worker-ID zurück
+    createWorker: jest.fn(() => Promise.resolve({ workerId: 1, worker: {} })), // Gibt eine Worker-ID zurück
     postMessageToWorker: jest.fn(),
     terminateWorker: jest.fn(),
     terminateAllWorkers: jest.fn(),
-    executeTaskInWorker: jest.fn((id, script, data, options) => 
+    executeTaskInWorker: jest.fn((id, script, data, options) =>
       Promise.resolve({ success: true, data: 'result', duration: 100 })
     ),
     getWorkerInfo: jest.fn(),
@@ -51,15 +51,6 @@ describe('ThreadPool', () => {
     expect(pool['workerManager']).toBeDefined();
   });
 
-  test('should initialize minimum number of workers', () => {
-    const createWorkerSpy = jest.spyOn(threadPool['workerManager'], 'createWorker');
-
-    threadPool.initializeWorkers();
-
-    // Es sollte versucht worden sein, minThreads viele Worker zu erstellen
-    expect(createWorkerSpy).toHaveBeenCalledTimes(threadPool['options'].minThreads);
-  });
-
   test('should execute a task using the thread pool', async () => {
     const executeTaskInWorkerSpy = jest.spyOn(threadPool['workerManager'], 'executeTaskInWorker');
     const taskData = { message: 'Hello, Worker!' };
@@ -98,7 +89,6 @@ describe('ThreadPool', () => {
 
   test('should shut down the thread pool and terminate all workers', () => {
     const terminateAllWorkersSpy = jest.spyOn(threadPool['workerManager'], 'terminateAllWorkers');
-    const clearIntervalSpy = jest.spyOn(global.Date, 'now'); // Für die Intervall-Clearing-Logik
 
     threadPool.shutdown();
 

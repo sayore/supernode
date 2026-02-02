@@ -109,7 +109,7 @@ export class Notification {
     // --- PACKET CONSTRUCTORS ---
 
     private static createHelloPacket(): Buffer {
-        let fields = Buffer.alloc(0);
+        let fields: Buffer = Buffer.alloc(0);
         fields = this.appendHeaderField(fields, 1, "o", "/org/freedesktop/DBus");
         fields = this.appendHeaderField(fields, 6, "s", "org.freedesktop.DBus");
         fields = this.appendHeaderField(fields, 2, "s", "org.freedesktop.DBus");
@@ -119,52 +119,52 @@ export class Notification {
 
     private static createNotifyPacket(title: string, body: string, replacesId: number, timeout: number): Buffer {
         // --- BODY ---
-        let payload = Buffer.alloc(0);
-        payload = this.appendString(payload, "SuperNode"); 
-        payload = this.appendUInt32(payload, replacesId);  
-        payload = this.appendString(payload, "");          
-        payload = this.appendString(payload, title);       
-        payload = this.appendString(payload, body);        
-        
+        let payload: Buffer = Buffer.alloc(0);
+        payload = this.appendString(payload, "SuperNode");
+        payload = this.appendUInt32(payload, replacesId);
+        payload = this.appendString(payload, "");
+        payload = this.appendString(payload, title);
+        payload = this.appendString(payload, body);
+
         // Actions (as): Array of Strings (Align 4)
-        payload = this.align(payload, 4); 
-        payload = Buffer.concat([payload, Buffer.from([0,0,0,0])]); 
-        
+        payload = this.align(payload, 4);
+        payload = Buffer.concat([payload, Buffer.from([0,0,0,0])]);
+
         // Hints (a{sv}): Array of Structs (Align 8)
         // CRITICAL FIX: Even if empty, we MUST align to 8 bytes after the length!
-        payload = this.align(payload, 4); 
+        payload = this.align(payload, 4);
         payload = Buffer.concat([payload, Buffer.from([0,0,0,0])]); // Length 0
         payload = this.align(payload, 8); // <--- THIS WAS MISSING
-        
+
         // Timeout (i): Int32 (Align 4)
-        payload = this.align(payload, 4); 
+        payload = this.align(payload, 4);
         const t=Buffer.alloc(4); t.writeInt32LE(timeout); payload = Buffer.concat([payload, t]);
 
         // --- HEADER ---
-        let fields = Buffer.alloc(0);
+        let fields: Buffer = Buffer.alloc(0);
         fields = this.appendHeaderField(fields, 1, "o", "/org/freedesktop/Notifications");
         fields = this.appendHeaderField(fields, 2, "s", "org.freedesktop.Notifications");
         fields = this.appendHeaderField(fields, 3, "s", "Notify");
         fields = this.appendHeaderField(fields, 6, "s", "org.freedesktop.Notifications");
         // Signature is REQUIRED for Notify
-        fields = this.appendHeaderField(fields, 8, "g", "susssasa{sv}i"); 
-        
+        fields = this.appendHeaderField(fields, 8, "g", "susssasa{sv}i");
+
         return this.wrapPacket(fields, payload);
     }
 
     private static wrapPacket(fields: Buffer, payload: Buffer): Buffer {
-        const fixedHeader = Buffer.alloc(12);
-        fixedHeader.write("l"); 
-        fixedHeader.writeUInt8(1, 1); 
-        fixedHeader.writeUInt8(0, 2); 
-        fixedHeader.writeUInt8(1, 3); 
+        const fixedHeader: Buffer = Buffer.alloc(12);
+        fixedHeader.write("l");
+        fixedHeader.writeUInt8(1, 1);
+        fixedHeader.writeUInt8(0, 2);
+        fixedHeader.writeUInt8(1, 3);
         fixedHeader.writeUInt32LE(payload.length, 4);
         fixedHeader.writeUInt32LE(this.serialId++, 8);
 
-        const headerLenBuf = Buffer.alloc(4);
+        const headerLenBuf: Buffer = Buffer.alloc(4);
         headerLenBuf.writeUInt32LE(fields.length);
 
-        let headerPart = Buffer.concat([fixedHeader, headerLenBuf, fields]);
+        let headerPart: Buffer = Buffer.concat([fixedHeader, headerLenBuf, fields]);
         const padding = (8 - (headerPart.length % 8)) % 8;
         if (padding > 0) headerPart = Buffer.concat([headerPart, Buffer.alloc(padding)]);
 
@@ -180,23 +180,23 @@ export class Notification {
 
     private static appendString(b: Buffer, s: string): Buffer {
         b = this.align(b, 4);
-        const sBuf = Buffer.from(s, 'utf8');
-        const l = Buffer.alloc(4); l.writeUInt32LE(sBuf.length);
+        const sBuf: Buffer = Buffer.from(s, 'utf8');
+        const l: Buffer = Buffer.alloc(4); l.writeUInt32LE(sBuf.length);
         return Buffer.concat([b, l, sBuf, Buffer.from([0])]);
     }
 
     private static appendUInt32(b: Buffer, v: number): Buffer {
         b = this.align(b, 4);
-        const buf = Buffer.alloc(4); buf.writeUInt32LE(v);
+        const buf: Buffer = Buffer.alloc(4); buf.writeUInt32LE(v);
         return Buffer.concat([b, buf]);
     }
 
     private static appendHeaderField(b: Buffer, code: number, type: "s"|"o"|"g", val: string): Buffer {
-        b = this.align(b, 8); 
+        b = this.align(b, 8);
         b = Buffer.concat([b, Buffer.from([code, 1]), Buffer.from(type), Buffer.from([0])]);
 
         if (type === 'g') {
-            const sBuf = Buffer.from(val, 'utf8');
+            const sBuf: Buffer = Buffer.from(val, 'utf8');
             // Signature: 1 byte len + string + NULL
             b = Buffer.concat([b, Buffer.from([sBuf.length]), sBuf, Buffer.from([0])]);
         } else {
